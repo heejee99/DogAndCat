@@ -5,16 +5,26 @@ using UnityEngine;
 public class Cats : MonoBehaviour
 {
     public float moveSpeed = 0.5f; //이동속도
-    public float Scale = 0.6f; //얘네 크기
+    public float Scale = 0.6f; //크기
+    public float hp = 80; //체력
+    private float maxHp; //최대 체력
+    public float attack = 6; //공격력
+
+
     [Tooltip("자식에 있는 오브젝트를 넣어주세요.")]
     public AnimalAnimation AnimalAnimation;
     private bool isContact = false;
     //AnimalAnimation AnimalAnimation = new AnimalAnimation();
     //처음엔 위에처럼 작성했는데 참조가 되지 않아서 계속 오류가 나왔다. 그래서 그냥 CharacterAnimation에서 자식 컴포넌트에 있는
     //Animator을 직접 참조하게만 하고 나는 public으로 Animator가 있는 자식 오브젝트를 직접 참조하게 해주었다.
+    private void Awake()
+    {
 
+        GameManager.Instance.cats.Add(this);
+    }
     private void Start()
     {
+        maxHp = hp;
     }
 
     private void Update()
@@ -27,8 +37,8 @@ public class Cats : MonoBehaviour
         }
         else
         {
-            Vector2 moveDir = new Vector2(1f, 0f);
-            Move(moveDir);
+            Vector2 go = new Vector2(1f, 0f);
+            Move(go);
             AnimalAnimation.Walk();
         }
     }
@@ -39,6 +49,13 @@ public class Cats : MonoBehaviour
         transform.localScale = new Vector3(Scale, Scale, Scale);
         transform.Translate(moveDir * moveSpeed * Time.deltaTime);
         transform.localScale = new Vector3(-Scale, Scale, Scale);
+    }
+
+    //데미지 입음
+    public void TakeDamage(float damage)
+    {
+        print("고양이가 데미지를 입음");
+        hp -= damage;
     }
     
 

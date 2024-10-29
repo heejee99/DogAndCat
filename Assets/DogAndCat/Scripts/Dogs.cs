@@ -5,9 +5,15 @@ using UnityEngine;
 public class Dogs : MonoBehaviour
 {
     public float moveSpeed = 0.5f; //이동속도
-    public float Scale = 0.6f; //얘네 크기
+    public float Scale = 0.6f; //크기
+    public float hp = 50; //체력
+    private float maxHp; //최대 체력
+    public float attack = 8; //공격력
+    public float Attack { get { return attack; } }
 
-    private bool isContact = false; //적을 만났는가?
+    public bool isContact = false; //적을 만났는가?
+
+    public float attackRange = 10f;
 
     [Tooltip("자식에 있는 오브젝트를 넣어주세요.")]
     public AnimalAnimation AnimalAnimation;
@@ -17,6 +23,8 @@ public class Dogs : MonoBehaviour
 
     private void Start()
     {
+        //StartCoroutine(OnAttackRange());
+        maxHp = hp;
     }
 
     private void Update()
@@ -29,10 +37,11 @@ public class Dogs : MonoBehaviour
         }
         else
         {
-            Vector2 moveDir = new Vector2(-1f, 0f);
-            Move(moveDir);
+            Vector2 go = new Vector2(-1f, 0f);
+            Move(go);
             AnimalAnimation.Walk();
         }
+        //Attack();
     }
 
     //움직임
@@ -43,13 +52,63 @@ public class Dogs : MonoBehaviour
         transform.localScale = new Vector3(Scale, Scale, Scale);
     }
 
-    //적 콜라이더를 감지함
-    public void OnTriggerEnter2D(Collider2D collision)
+    public bool IsContact()
     {
-       if(collision.TryGetComponent<Cats>(out Cats cats))
-        {
-            isContact = true; 
-        }
+        isContact = !isContact;
+        return isContact;
     }
+
+    //public void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    if (collision.TryGetComponent<Cats>(out Cats cats))
+    //    {
+    //        GameManager.Instance.cats.Add(cats);
+    //        foreach (var cat in GameManager.Instance.cats)
+    //        {
+    //            cat.TakeDamage(attack);
+    //            print(cat.hp);
+    //        }
+    //    }
+    //}
+
+    ////적 콜라이더를 감지함
+    //public void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //   if(collision.TryGetComponent<Cats>(out Cats cats))
+    //    {
+    //        isContact = true; 
+    //    }
+    //}
+
+    //IEnumerator OnAttackRange()
+    //{
+    //    while (true)
+    //    {
+    //        Collider2D[] contactedColls = Physics2D.OverlapBoxAll(new Vector2(transform.position.x - 1 * attackRange, transform.position.y), new Vector2(1, 1) * attackRange / 2, 0);
+
+    //        foreach (Collider2D contactedColl in contactedColls)
+    //        {
+    //            if (contactedColl.CompareTag("Cat"))
+    //            {
+    //                print($"지금 범위에 있는 고양이 수 : {contactedColls.Length}");
+    //            }
+    //        }
+    //        yield return null;
+    //    }
+    //}
+
+    //private void Attack()
+    //{
+    //    Collider2D[] contactedColls = Physics2D.OverlapBoxAll(new Vector2(transform.position.x - 1 * attackRange, transform.position.y), new Vector2(1, 1) * attackRange / 2, 0);
+
+    //    foreach (Collider2D contactedColl in contactedColls)
+    //    {
+    //        if (contactedColl.CompareTag("Cat"))
+    //        {
+    //            print($"지금 범위에 있는 고양이 수 : {contactedColls.Length}");
+    //        }
+    //    }
+
+    //}
 
 }
