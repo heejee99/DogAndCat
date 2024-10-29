@@ -10,7 +10,8 @@ public abstract class CharacterAnimation : MonoBehaviour
 
     protected void Start()
     {
-        Animator = GetComponent<Animator>();
+        //Animator가 자식오브젝트에 있어서 GetComponenetInChildren을 씀
+        Animator = GetComponentInChildren<Animator>();
         SetAnimation(Acting.Idle);
     }
 
