@@ -1315,7 +1315,7 @@ GameObject:
   - component: {fileID: 3323883404242765829}
   - component: {fileID: 8284376812236601015}
   m_Layer: 0
-  m_Name: Pit bull
+  m_Name: Dog_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

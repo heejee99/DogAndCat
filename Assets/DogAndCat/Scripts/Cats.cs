@@ -12,8 +12,8 @@ public class Cats : MonoBehaviour
     private float maxHp; //최대 체력
     public float damage = 6; //공격력
     public bool attackType; //공격 타입
-    public bool isDead = false; //죽었는지
 
+    public bool isDead = false; //죽었는지
 
 
     public bool isContact = false;
@@ -30,30 +30,35 @@ public class Cats : MonoBehaviour
     private void Start()
     {
         maxHp = hp;
-        GameManager.Instance.cats.Add(this);
     }
 
     private void Update()
     {
-        if (isContact)
-        {
-            Vector2 stop = Vector2.zero;
-            Move(stop);
-            AnimalAnimation.Jump();
-        }
-        else
-        {
-            Vector2 goRight = Vector2.right;
-            Move(goRight);
-            AnimalAnimation.Walk();
-        }
+        //if (gameObject.transform != null)
+        //{
+        //    if (isContact)
+        //    {
+        //        Vector2 stop = Vector2.zero;
+        //        Move(stop);
+        //        AnimalAnimation.Jump();
+        //    }
+        //    else
+        //    {
+        //        Vector2 goRight = Vector2.right;
+        //        Move(goRight);
+        //        AnimalAnimation.Walk();
+        //    }
 
-        IsDead();
+        //    IsDead();
+        //}
+        Vector2 goRight = Vector2.right;
+        Move(goRight);
     }
 
     //움직임
     public void Move(Vector2 moveDir)
     {
+        AnimalAnimation.Walk();
         transform.localScale = new Vector3(-Scale, Scale, Scale);
         transform.Translate(moveDir * moveSpeed * Time.deltaTime);
     }
@@ -62,12 +67,10 @@ public class Cats : MonoBehaviour
     public void TakeDamage(float damage)
     {
         hp -= damage;
-    }
-
-    public bool IsContact()
-    {
-        isContact = !isContact;
-        return isContact;
+        if (IsDead())
+        {
+            OnDead();
+        }
     }
 
     public bool IsDead()
@@ -76,8 +79,13 @@ public class Cats : MonoBehaviour
         {
             isDead = true;
         }
-        DestroyImmediate(this);
         return isDead;
+    }
+
+    private void OnDead()
+    {
+        GameManager.Instance.cats.Remove(this);
+        Destroy(this);
     }
 
     //적 콜라이더를 감지함

@@ -28,7 +28,7 @@ public class Dogs : MonoBehaviour
     {
         //StartCoroutine(OnAttackRange());
         maxHp = hp;
-        GameManager.Instance.dogs.Add(this);
+        //GameManager.Instance.dogs.Add(this);
     }
 
     private void Update()
@@ -61,11 +61,6 @@ public class Dogs : MonoBehaviour
         hp -= damage;
     }
 
-    public void Attack()
-    {
-
-    }
-    
 
     //public void OnTriggerEnter2D(Collider2D collision)
     //{

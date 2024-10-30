@@ -63,12 +63,12 @@ public class DogAttackRange : MonoBehaviour
                         print("고양이가 맞음");
                         print($"남은 고양이 체력{cat.hp}");
                     }
-                    //근데 고양이 죽으면
-                    if (cats.IsDead())
-                    {
-                        dog.isContact = false;
-                        return;
-                    }
+                    ////근데 고양이 죽으면
+                    //if (cats.IsDead())
+                    //{
+                    //    dog.isContact = false;
+                    //    return;
+                    //}
                 }
 
             }
