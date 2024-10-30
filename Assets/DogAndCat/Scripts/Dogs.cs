@@ -6,14 +6,17 @@ public class Dogs : MonoBehaviour
 {
     public float moveSpeed = 0.5f; //이동속도
     public float Scale = 0.6f; //크기
+    public float attackSpeed = 1f; //공격속도
+    public float attackRange = 1f; //공격범위
     public float hp = 50; //체력
     private float maxHp; //최대 체력
-    public float attack = 8; //공격력
-    public float Attack { get { return attack; } }
+    public float damage = 8; //공격력
+    public float cost = 200; //생산비용
+
+    public bool attackType; //공격 타입
 
     public bool isContact = false; //적을 만났는가?
 
-    public float attackRange = 10f;
 
     [Tooltip("자식에 있는 오브젝트를 넣어주세요.")]
     public AnimalAnimation AnimalAnimation;
@@ -25,20 +28,23 @@ public class Dogs : MonoBehaviour
     {
         //StartCoroutine(OnAttackRange());
         maxHp = hp;
+        GameManager.Instance.dogs.Add(this);
     }
 
     private void Update()
     {
+        //적을 안만나면 멈춤
         if (isContact)
         {
-            Vector2 stop = new Vector2(0, 0);
+            Vector2 stop = Vector2.zero;
             Move(stop);
             AnimalAnimation.Jump();
         }
+        //적 만나면 움직임
         else
         {
-            Vector2 go = new Vector2(-1f, 0f);
-            Move(go);
+            Vector2 gLeft = Vector2.left;
+            Move(gLeft);
             AnimalAnimation.Walk();
         }
         //Attack();
@@ -49,14 +55,17 @@ public class Dogs : MonoBehaviour
     {
         transform.localScale = new Vector3(Scale, Scale, Scale);
         transform.Translate(moveDir * moveSpeed * Time.deltaTime);
-        transform.localScale = new Vector3(Scale, Scale, Scale);
+    }
+    public void TakeDamage(float damage)
+    {
+        hp -= damage;
     }
 
-    public bool IsContact()
+    public void Attack()
     {
-        isContact = !isContact;
-        return isContact;
+
     }
+    
 
     //public void OnTriggerEnter2D(Collider2D collision)
     //{
