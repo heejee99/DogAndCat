@@ -1,27 +1,52 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
     public float hp;
 
-    public int delayTimeForSpawnCat_1 = 7;
-    public int delayTimeForSpawnCat_2 = 10;
-    public int delayTImeForSpawnCat_3 = 30;
+    public float delayTimeForSpawnCat_1 = 7f;
+    public float delayTimeForSpawnCat_2 = 10f;
+    public float delayTimeForSpawnCat_3 = 30f;
 
+    private void Awake()
+    {
+        GameManager.Instance.enemy = this;
+    }
     private void Start()
     {
         StartCoroutine("SpawnCat_1", 1);
+        StartCoroutine("SpawnCat_2", 2);
+        StartCoroutine("SpawnCat_3", 3);
     }
 
     public IEnumerator SpawnCat_1(int id)
     {
-        ResourceManager.Instance.SpawnCat(id);
         while (true)
         {
             ResourceManager.Instance.SpawnCat(id);
             yield return new WaitForSeconds(delayTimeForSpawnCat_1);
+        }
+    }
+
+    public IEnumerator SpawnCat_2(int id)
+    {
+        yield return new WaitForSeconds(60f);
+        while (true)
+        {
+            ResourceManager.Instance.SpawnCat(id);
+            yield return new WaitForSeconds(delayTimeForSpawnCat_2);
+        }
+    }
+    public IEnumerator SpawnCat_3(int id)
+    {
+        yield return new WaitForSeconds(120f);
+        while (true)
+        {
+            ResourceManager.Instance.SpawnCat(id);
+            yield return new WaitForSeconds(delayTimeForSpawnCat_3);
         }
     }
 }

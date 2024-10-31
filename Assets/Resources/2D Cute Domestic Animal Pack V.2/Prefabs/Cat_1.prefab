@@ -65,12 +65,24 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 900419899709576432, guid: fba436c12c39b4164b53873590a04cda, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 900419899709576432, guid: fba436c12c39b4164b53873590a04cda, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 900419899709576432, guid: fba436c12c39b4164b53873590a04cda, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 900419899709576432, guid: fba436c12c39b4164b53873590a04cda, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -5.73
       objectReference: {fileID: 0}
     - target: {fileID: 900419899709576432, guid: fba436c12c39b4164b53873590a04cda, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.83
       objectReference: {fileID: 0}
     - target: {fileID: 900419899709576432, guid: fba436c12c39b4164b53873590a04cda, type: 3}
       propertyPath: m_LocalPosition.z
@@ -104,9 +116,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 900419899709576432, guid: fba436c12c39b4164b53873590a04cda, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 900419899709576433, guid: fba436c12c39b4164b53873590a04cda, type: 3}
       propertyPath: m_Name
       value: Cat_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 900419899709576433, guid: fba436c12c39b4164b53873590a04cda, type: 3}
+      propertyPath: m_TagString
+      value: Cat
       objectReference: {fileID: 0}
     - target: {fileID: 900419899769221718, guid: fba436c12c39b4164b53873590a04cda, type: 3}
       propertyPath: m_Sprite
@@ -297,9 +317,6 @@ PrefabInstance:
       addedObject: {fileID: 6105542152155715001}
     - targetCorrespondingSourceObject: {fileID: 900419899709576433, guid: fba436c12c39b4164b53873590a04cda, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2204454403177047359}
-    - targetCorrespondingSourceObject: {fileID: 900419899709576433, guid: fba436c12c39b4164b53873590a04cda, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1562303536075579992}
     - targetCorrespondingSourceObject: {fileID: 900419899709576433, guid: fba436c12c39b4164b53873590a04cda, type: 3}
       insertIndex: -1
@@ -336,33 +353,12 @@ MonoBehaviour:
   moveSpeed: 0.5
   Scale: 0.6
   attackSpeed: 1
-  hp: 80
+  hp: 100
   damage: 6
   attackType: 0
   isDead: 0
   isContact: 0
   AnimalAnimation: {fileID: 20777289079126811}
---- !u!114 &2204454403177047359
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8417105603460280166}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89b75181d41b2d344b65643a807607f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 0.5
-  Scale: 0.6
-  attackSpeed: 1
-  hp: 80
-  damage: 6
-  attackType: 0
-  isDead: 0
-  isContact: 0
-  AnimalAnimation: {fileID: 0}
 --- !u!50 &1562303536075579992
 Rigidbody2D:
   serializedVersion: 4

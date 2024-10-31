@@ -28,7 +28,7 @@ public class Player : MonoBehaviour
         //    //dogPrefab  = Resources.Load<GameObject>("2D Cute Domestic Animal Pack V.2/Prefabs/");
         //    spawnHound = new UnityEvent();
         //}
-
+        GameManager.Instance.player = this;
     }
 
 

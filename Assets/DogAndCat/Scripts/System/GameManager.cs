@@ -7,4 +7,6 @@ public class GameManager : SingletonManager<GameManager>
 {
     public List<Cats> cats = new List<Cats>();
     public List<Dogs> dogs = new List<Dogs>();
+    public Enemy enemy;
+    public Player player;
 }

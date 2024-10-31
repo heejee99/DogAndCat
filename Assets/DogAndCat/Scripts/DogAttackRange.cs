@@ -5,7 +5,7 @@ using UnityEngine;
 public class DogAttackRange : MonoBehaviour
 {
     //범위 안에 있는 고양이들을 받아줄 리스트
-    private List<Cats> detectedCatList = null;
+    private List<Cats> detectedCatList = new List<Cats>();
     //부모로 있는 오브젝트를 받음
     private Dogs dog;
 
@@ -19,26 +19,23 @@ public class DogAttackRange : MonoBehaviour
     }
     private void Update()
     {
-        //Collider2D[] colliders = Physics2D.OverlapBoxAll(dog.transform.position, new Vector2(dog.attackRange, 2 * dog.attackRange), 0);
-    
-        //foreach(Collider2D collider in colliders)
-        //{
-        //    if (collider.CompareTag("Cat"))
-        //    {
-        //        Cats cat = collider.GetComponent<Cats>();
-
-        //        if(cat != null && cat.GetComponent<Rigidbody2D>() != null)
-        //        {
-        //            dog.AnimalAnimation.Jump();
-        //            cat.TakeDamage(dog.damage);
-        //            print("고양이 공격 받음");
-        //        }
-        //    }
-
-        //}
+        if (detectedCatList.Count > 0 && Time.time >= preDamageTime + dog.damageInterval)
+        {
+            foreach (var cat in detectedCatList)
+            {
+                if (cat != null)
+                {
+                    cat.TakeDamage(dog.damage);
+                    print($"고양이 남은 체력 : {cat.hp}");
+                }
+            }
+            preDamageTime = Time.time;
+        }
     }
 
-    public void OnTriggerEnter2D(Collider2D collision)
+    private float preDamageTime; //이전에 데미지를 준 시간(Time.time)
+
+    public void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.TryGetComponent<Cats>(out Cats cats))
         {
@@ -48,29 +45,39 @@ public class DogAttackRange : MonoBehaviour
                 //처음 보는 얘면 리스트에 추가해줌
                 detectedCatList.Add(cats);
                 //근데 그 리스트가 0이 아닐때 까지
-                while (detectedCatList.Count != 0)
-                {
-                    //정지
-                    dog.isContact = true;
-                    //GameManager.Instance.cats.Add(cats); //만난 고양이들을 리스트에 담아줌
-                    //dog.IsContact(); //isContact -> true로 바꿔줌
+                //정지
+                dog.isContact = true;
 
-                    //리스트에 있는 고양이들 전부
-                    foreach (var cat in detectedCatList)
-                    {
-                        //데미지 입음
-                        cat.TakeDamage(dog.damage);
-                        print("고양이가 맞음");
-                        print($"남은 고양이 체력{cat.hp}");
-                    }
-                    ////근데 고양이 죽으면
-                    //if (cats.IsDead())
-                    //{
-                    //    dog.isContact = false;
-                    //    return;
-                    //}
-                }
+                ////근데 고양이 죽으면
+                //if (cats.IsDead())
+                //{
+                //    dog.isContact = false;
+                //    return;
+                //}
+            }
+        }
 
+        //if (collision.CompareTag("Cat"))
+        //{
+        //    Cats cats = collision.GetComponent<Cats>();
+        //    detectedCatList.Add(cats);
+        //    foreach(Cats cat in detectedCatList)
+        //    {
+        //        cat.TakeDamage(dog.damage);
+        //    }
+        //}
+    }
+
+    //콜라이더 범위 벗어나면 detectedCatList에서 벗어나서 데미지 안입음
+    public void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Cat"))
+        {
+            Cats cats = collision.GetComponent<Cats>();
+            if (detectedCatList.Contains(cats))
+            {
+                detectedCatList.Remove(cats);
+                dog.isContact = false;
             }
         }
     }

@@ -6,16 +6,19 @@ public class Dogs : MonoBehaviour
 {
     public float moveSpeed = 0.5f; //이동속도
     public float Scale = 0.6f; //크기
-    public float attackSpeed = 1f; //공격속도
-    public float attackRange = 1f; //공격범위
+    public float damageInterval = 1f; //공격주기
+    public float attackRangeScale = 1f; //공격범위
     public float hp = 50; //체력
     private float maxHp; //최대 체력
     public float damage = 8; //공격력
     public float cost = 200; //생산비용
 
+    private bool isDead = false; //죽었는가?
+
     public bool attackType; //공격 타입
 
     public bool isContact = false; //적을 만났는가?
+
 
 
     [Tooltip("자식에 있는 오브젝트를 넣어주세요.")]
@@ -33,32 +36,72 @@ public class Dogs : MonoBehaviour
 
     private void Update()
     {
-        //적을 안만나면 멈춤
         if (isContact)
         {
             Vector2 stop = Vector2.zero;
             Move(stop);
-            AnimalAnimation.Jump();
+            //Attack();
         }
-        //적 만나면 움직임
         else
         {
             Vector2 gLeft = Vector2.left;
             Move(gLeft);
-            AnimalAnimation.Walk();
         }
         //Attack();
+        //Collider2D[] colliders = Physics2D.OverlapBoxAll(transform.position, new Vector2(attackRange, 2 * attackRange), 0);
+        //foreach (Collider2D collider in colliders)
+        //{
+        //    if (collider.CompareTag("Cat"))
+        //    {
+        //        Cats cat = collider.GetComponent<Cats>();
+        //        detectedCatList.Add(cat);
+
+        //        //if (cat != null && cat.GetComponent<Rigidbody2D>() != null)
+        //        //{
+        //        //    dog.AnimalAnimation.Jump();
+        //        //    cat.TakeDamage(dog.damage);
+        //        //    print("고양이 공격 받음");
+        //        //}
+        //        isContact = true;
+        //        print("공격 개시!");
+        //    }
+        //}
     }
+
 
     //움직임
     public void Move(Vector2 moveDir)
     {
+        AnimalAnimation.Walk();
         transform.localScale = new Vector3(Scale, Scale, Scale);
         transform.Translate(moveDir * moveSpeed * Time.deltaTime);
     }
+
     public void TakeDamage(float damage)
     {
         hp -= damage;
+        if(IsDead())
+        {
+            OnDead();
+        }
+    }
+
+    //죽었는지 살았는지 확인하는 함수
+    public bool IsDead()
+    {
+        if (hp <= 0)
+        {
+            isDead = true;
+        }
+        return isDead;
+    }
+
+    //죽으면 뜨는 함수
+    public void OnDead()
+    {
+        GameManager.Instance.dogs.Remove(this);
+        Destroy(this);
+
     }
 
 
@@ -84,10 +127,11 @@ public class Dogs : MonoBehaviour
     //    }
     //}
 
-    //IEnumerator OnAttackRange()
+    //public void OnAttackRange()
     //{
     //    while (true)
     //    {
+    //        if ()
     //        Collider2D[] contactedColls = Physics2D.OverlapBoxAll(new Vector2(transform.position.x - 1 * attackRange, transform.position.y), new Vector2(1, 1) * attackRange / 2, 0);
 
     //        foreach (Collider2D contactedColl in contactedColls)
@@ -97,22 +141,22 @@ public class Dogs : MonoBehaviour
     //                print($"지금 범위에 있는 고양이 수 : {contactedColls.Length}");
     //            }
     //        }
-    //        yield return null;
     //    }
     //}
 
-    //private void Attack()
-    //{
-    //    Collider2D[] contactedColls = Physics2D.OverlapBoxAll(new Vector2(transform.position.x - 1 * attackRange, transform.position.y), new Vector2(1, 1) * attackRange / 2, 0);
+    private void Attack()
+    {
+        isContact = true;
+        //Collider2D[] contactedColls = Physics2D.OverlapBoxAll(new Vector2(transform.position.x - 1 * attackRange, transform.position.y), new Vector2(1, 1) * attackRange / 2, 0);
 
-    //    foreach (Collider2D contactedColl in contactedColls)
-    //    {
-    //        if (contactedColl.CompareTag("Cat"))
-    //        {
-    //            print($"지금 범위에 있는 고양이 수 : {contactedColls.Length}");
-    //        }
-    //    }
-
-    //}
+        //foreach (Collider2D contactedColl in contactedColls)
+        //{
+        //    if (contactedColl.CompareTag("Cat"))
+        //    {
+        //        print($"지금 범위에 있는 고양이 수 : {contactedColls.Length}");
+        //    }
+        //}
+        AnimalAnimation.Jump();
+    }
 
 }
