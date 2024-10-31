@@ -1442,14 +1442,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 0.5
   Scale: 0.6
-  attackSpeed: 1
+  damageInterval: 1
   attackRangeScale: 1
   hp: 50
   damage: 8
   cost: 200
   attackType: 0
   isContact: 0
-  AnimalAnimation: {fileID: 4783074682003789045}
+  animalAnimation: {fileID: 4783074682003789045}
 --- !u!61 &3323883404242765829
 BoxCollider2D:
   m_ObjectHideFlags: 0

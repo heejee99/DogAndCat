@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 
 public class CatAttackRange : MonoBehaviour
@@ -18,30 +20,56 @@ public class CatAttackRange : MonoBehaviour
     }
     private void Update()
     {
+        var tmp = new List<Dogs>();
+        tmp = detectedDogList;
+        if (tmp.Count > 0 && Time.time >= preDamageTime + cat.attackInterval)
+        {
+            for (int i = 0; i < tmp.Count; i++)
+            {
 
+                if (tmp[i] != null)
+                {
+                    tmp[i].TakeDamage(cat.damage);
+                    print($"강아지 남은 체력{detectedDogList[i].hp}");
+                }
+                else if (tmp[i].hp <= 0)
+                {
+                    detectedDogList.RemoveAt(i);
+                }
+                preDamageTime = Time.time;
+            }
+        }
+
+        if (detectedDogList.Count == 0)
+        {
+            cat.isContact = false;
+        }
     }
 
-    public void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.TryGetComponent<Dogs>(out Dogs dogs))
-        {
-            //print($"Cat : {detectedDogList.Count}");
+    private float preDamageTime;
 
+    public void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.TryGetComponent(out Dogs dogs))
+        {
             if (!detectedDogList.Contains(dogs))
             {
                 detectedDogList.Add(dogs);
-                //GameManager.Instance.dogs.Add(dogs);
-                while (detectedDogList.Count != 0)
-                {
-                    cat.isContact = true; //isContact -> true로 바꿔줌
-                    foreach (var dog in detectedDogList)
-                    {
-                        dog.TakeDamage(cat.damage);
-                        print("강아지가 맞음");
-                        print($"남은 강아지 체력{dog.hp}");
-                    }
-                    //if (dogs.IsDead())
-                }
+
+                cat.isContact = true;
+            }
+        }
+    }
+
+    public void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Cat"))
+        {
+            Dogs dogs = collision.GetComponent<Dogs>();
+            if (detectedDogList.Contains(dogs))
+            {
+                detectedDogList.Remove(dogs);
+                dogs.isContact = false;
             }
         }
     }

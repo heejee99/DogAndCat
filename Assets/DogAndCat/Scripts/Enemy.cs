@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public float hp;
+    public float hp = 1000f;
+    private float maxHp;
 
     public float delayTimeForSpawnCat_1 = 7f;
     public float delayTimeForSpawnCat_2 = 10f;
@@ -16,7 +17,7 @@ public class Enemy : MonoBehaviour
         GameManager.Instance.enemy = this;
     }
     private void Start()
-    {
+    {   maxHp = hp; 
         StartCoroutine("SpawnCat_1", 1);
         StartCoroutine("SpawnCat_2", 2);
         StartCoroutine("SpawnCat_3", 3);
@@ -30,7 +31,6 @@ public class Enemy : MonoBehaviour
             yield return new WaitForSeconds(delayTimeForSpawnCat_1);
         }
     }
-
     public IEnumerator SpawnCat_2(int id)
     {
         yield return new WaitForSeconds(60f);
@@ -48,5 +48,11 @@ public class Enemy : MonoBehaviour
             ResourceManager.Instance.SpawnCat(id);
             yield return new WaitForSeconds(delayTimeForSpawnCat_3);
         }
+    }
+
+    public void TakeDamage(float damage)
+    {
+        hp -= damage;
+        print("타워가 데미지를 입음");
     }
 }

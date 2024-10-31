@@ -140,11 +140,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1924948138404641380, guid: 5527a0347e8a7444daf204af4566ef38, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.113
+      value: 2.18
       objectReference: {fileID: 0}
     - target: {fileID: 1924948138404641380, guid: 5527a0347e8a7444daf204af4566ef38, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.204
+      value: -2.05
       objectReference: {fileID: 0}
     - target: {fileID: 1924948138404641380, guid: 5527a0347e8a7444daf204af4566ef38, type: 3}
       propertyPath: m_LocalPosition.z
@@ -266,6 +266,10 @@ PrefabInstance:
       propertyPath: attackRange
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 2497547882077171014, guid: 5527a0347e8a7444daf204af4566ef38, type: 3}
+      propertyPath: animalAnimation
+      value: 
+      objectReference: {fileID: 455654791554792816}
     - target: {fileID: 3456480264422509612, guid: 5527a0347e8a7444daf204af4566ef38, type: 3}
       propertyPath: m_labelHash
       value: 8.751192e-33
@@ -370,6 +374,17 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 8290690829351427656}
   m_SourcePrefab: {fileID: 100100000, guid: 5527a0347e8a7444daf204af4566ef38, type: 3}
+--- !u!114 &455654791554792816 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 849375835230977166, guid: 5527a0347e8a7444daf204af4566ef38, type: 3}
+  m_PrefabInstance: {fileID: 980475527060898302}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4da9fa8cf6574d4d944387c1fdac26e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1670153137979505562 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1924948138404641380, guid: 5527a0347e8a7444daf204af4566ef38, type: 3}

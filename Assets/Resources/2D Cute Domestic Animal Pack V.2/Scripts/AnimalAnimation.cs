@@ -3,7 +3,10 @@ using UnityEngine;
 
 public class AnimalAnimation : CharacterAnimation
 {
-
+    //private void Awake()
+    //{
+    //    AnimationManager.Instance.animalAnimation = this;
+    //}
     protected override void SetAnimation(Acting acting)
     {
         if (IsDead)

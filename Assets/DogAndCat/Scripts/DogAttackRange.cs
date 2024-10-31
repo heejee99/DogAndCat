@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 public class DogAttackRange : MonoBehaviour
@@ -19,25 +21,36 @@ public class DogAttackRange : MonoBehaviour
     }
     private void Update()
     {
-        if (detectedCatList.Count > 0 && Time.time >= preDamageTime + dog.damageInterval)
+        var tmp = new List<Cats>();
+        tmp = detectedCatList;
+        if (tmp.Count > 0 && Time.time >= preDamageTime + dog.attackInterval)
         {
-            foreach (var cat in detectedCatList)
+            for (int i = 0; i < tmp.Count; i++)
             {
-                if (cat != null)
+                if (tmp[i] != null)
                 {
-                    cat.TakeDamage(dog.damage);
-                    print($"고양이 남은 체력 : {cat.hp}");
+                    tmp[i].TakeDamage(dog.damage);
+                    print($"고양이 남은 체력 : {detectedCatList[i].hp}");
                 }
+                else if (tmp[i].hp <= 0)
+                {
+                    detectedCatList.RemoveAt(i);
+                }
+                preDamageTime = Time.time;
+
             }
-            preDamageTime = Time.time;
+        }
+        if (detectedCatList.Count == 0)
+        {
+            dog.isContact = false;
         }
     }
 
     private float preDamageTime; //이전에 데미지를 준 시간(Time.time)
 
-    public void OnTriggerStay2D(Collider2D collision)
+    public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent<Cats>(out Cats cats))
+        if (collision.TryGetComponent(out Cats cats))
         {
             //중복 검사
             if (!detectedCatList.Contains(cats))
@@ -47,25 +60,14 @@ public class DogAttackRange : MonoBehaviour
                 //근데 그 리스트가 0이 아닐때 까지
                 //정지
                 dog.isContact = true;
-
-                ////근데 고양이 죽으면
-                //if (cats.IsDead())
-                //{
-                //    dog.isContact = false;
-                //    return;
-                //}
             }
         }
 
-        //if (collision.CompareTag("Cat"))
-        //{
-        //    Cats cats = collision.GetComponent<Cats>();
-        //    detectedCatList.Add(cats);
-        //    foreach(Cats cat in detectedCatList)
-        //    {
-        //        cat.TakeDamage(dog.damage);
-        //    }
-        //}
+        if (collision.CompareTag("Enemy"))
+        {
+            StartCoroutine("AttackEnemyTower", dog.attackInterval);
+        }
+
     }
 
     //콜라이더 범위 벗어나면 detectedCatList에서 벗어나서 데미지 안입음
@@ -80,6 +82,17 @@ public class DogAttackRange : MonoBehaviour
                 dog.isContact = false;
             }
         }
+    }
+
+    private IEnumerator AttackEnemyTower(float attackInterval)
+    {
+        dog.isContact = true;
+        while (true)
+        {
+            GameManager.Instance.enemy.TakeDamage(dog.damage);
+            yield return new WaitForSeconds(attackInterval);
+        }
+        
     }
 
     //적 콜라이더를 감지함, 근데 아래꺼는 범위공격이 안됨 공격 범위 내에 타겟팅이 한마리만 가능
