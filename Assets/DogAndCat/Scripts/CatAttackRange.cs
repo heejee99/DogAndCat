@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using UnityEngine;
 
 public class CatAttackRange : MonoBehaviour
@@ -21,7 +22,7 @@ public class CatAttackRange : MonoBehaviour
     private void Update()
     {
         var tmp = new List<Dogs>();
-        tmp = detectedDogList;
+        tmp = detectedDogList.ToList();
         if (tmp.Count > 0 && Time.time >= preDamageTime + cat.attackInterval)
         {
             for (int i = 0; i < tmp.Count; i++)
@@ -30,7 +31,8 @@ public class CatAttackRange : MonoBehaviour
                 if (tmp[i] != null)
                 {
                     tmp[i].TakeDamage(cat.damage);
-                    print($"강아지 남은 체력{detectedDogList[i].hp}");
+                    if (tmp[i] != null)
+                        print($"강아지 남은 체력{tmp[i].hp}");
                 }
                 else if (tmp[i].hp <= 0)
                 {

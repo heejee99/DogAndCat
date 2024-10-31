@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
@@ -22,7 +23,7 @@ public class DogAttackRange : MonoBehaviour
     private void Update()
     {
         var tmp = new List<Cats>();
-        tmp = detectedCatList;
+        tmp = detectedCatList.ToList();
         if (tmp.Count > 0 && Time.time >= preDamageTime + dog.attackInterval)
         {
             for (int i = 0; i < tmp.Count; i++)
@@ -30,7 +31,8 @@ public class DogAttackRange : MonoBehaviour
                 if (tmp[i] != null)
                 {
                     tmp[i].TakeDamage(dog.damage);
-                    print($"고양이 남은 체력 : {detectedCatList[i].hp}");
+                    if (tmp[i] != null)
+                    print($"고양이 남은 체력 : {tmp[i].hp}");
                 }
                 else if (tmp[i].hp <= 0)
                 {

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Dog
   - Cat
+  - Enemy
   layers:
   - Default
   - TransparentFX
