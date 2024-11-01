@@ -203,6 +203,11 @@ MonoBehaviour:
   spawnDelayAmount: []
   spawnDelayScale: []
   goldText: {fileID: 0}
+  maxGold: 6400000096000000c8000000fa0000002c0100005e01000090010000
+  levelUpCost: 000000000000000000000000000000000000000000000000
+  goldPerSecond: 
+  goldIncreaseInterval: 1
+  goldDisPlayDuration: 0
 --- !u!4 &85628261
 Transform:
   m_ObjectHideFlags: 0
@@ -580,6 +585,11 @@ MonoBehaviour:
   - 10
   - 20
   goldText: {fileID: 1049133578}
+  maxGold: 6400000096000000c8000000fa0000002c0100005e01000090010000
+  levelUpCost: 280000005000000078000000a0000000c8000000f0000000
+  goldPerSecond: 060000000a0000000e00000012000000160000001a0000001e000000
+  goldIncreaseInterval: 1
+  goldDisPlayDuration: 0.5
 --- !u!1 &340800009
 GameObject:
   m_ObjectHideFlags: 0

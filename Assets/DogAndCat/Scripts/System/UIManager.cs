@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,8 +32,6 @@ public class UIManager : SingletonManager<UIManager>
     public int[] goldPerSecond = { 6, 10, 14, 18, 22, 26, 30 };
     //현재 보유중인 골드
     private int currentGold = 0;
-    //1초를 재줄 timer
-    private float timer = 1f;
 
 
 
@@ -47,12 +46,23 @@ public class UIManager : SingletonManager<UIManager>
             currentSpawnDelay.Add(spawnDelayScale[i]);
             canSpawn.Add(false);
         }
-        //currentSpawnDelay = spawnDelayScale.ToList();
+
     }
+
+    private float goldIncreasedTime;
+    //골드가 오르는 인터벌인데 1초로 줬음
+    public float goldIncreaseInterval = 1f;
+
     private void Update()
     {
         UpdateSpawnDelay();
         
+        if (Time.time > goldIncreasedTime + goldIncreaseInterval)
+        {
+            StartCoroutine(SetGoldText(currentGold));
+            currentGold += goldPerSecond[playerLevel];
+            goldIncreasedTime = Time.time;
+        }
     }
 
     private void UpdateSpawnDelay()
@@ -81,13 +91,25 @@ public class UIManager : SingletonManager<UIManager>
         currentSpawnDelay[id - 1] = 0f;
     }
 
-    //public void GetGold()
-    //{
-    //    timer += Time.deltaTime;
-    //    if (timer >= 1)
-    //    {
-    //        currentGold += gold
-    //    }
-    //}
+    public float goldDisPlayDuration;
 
+    IEnumerator SetGoldText(int startGold)
+    {
+        float startTime = Time.time;
+        float endTime = Time.time + goldDisPlayDuration;
+
+        while (Time.time < endTime)
+        {
+            goldText.text = Mathf.Lerp(currentGold, startGold, (endTime - Time.time) / goldDisPlayDuration).ToString("n0");
+            yield return null;
+        }
+    }
+
+    public void LevelUp()
+    {
+        if (currentGold >= maxGold[playerLevel])
+        {
+            playerLevel++;
+        }
+    }
 }
