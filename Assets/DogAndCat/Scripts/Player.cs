@@ -38,8 +38,6 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        float DeltaTime = Time.deltaTime;
-        print($"{DeltaTime}");
     }
 
     public void SpawnButton(int id)
