@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,6 +20,26 @@ public class UIManager : SingletonManager<UIManager>
     //현재 쿨타임
     private List<float> currentSpawnDelay = new();
 
+    public TextMeshProUGUI goldText;
+
+    private int playerLevel = 0;
+    //자원 상한선
+    public int[] maxGold = { 100, 150, 200, 250, 300, 350, 400 };
+    //레벨업 비용
+    public int[] levelUpCost = { 40, 80, 120, 160, 200, 240 };
+    //초당 오르는 골드
+    public int[] goldPerSecond = { 6, 10, 14, 18, 22, 26, 30 };
+    //현재 보유중인 골드
+    private int currentGold = 0;
+    //1초를 재줄 timer
+    private float timer = 1f;
+
+
+
+    protected override void Awake()
+    {
+        base.Awake();
+    }
     private void Start()
     {
         for (int i = 0; i < spawnDelayScale.Count; i++)
@@ -31,6 +52,7 @@ public class UIManager : SingletonManager<UIManager>
     private void Update()
     {
         UpdateSpawnDelay();
+        
     }
 
     private void UpdateSpawnDelay()
@@ -58,4 +80,14 @@ public class UIManager : SingletonManager<UIManager>
         GameManager.Instance.player.SpawnButton(id);
         currentSpawnDelay[id - 1] = 0f;
     }
+
+    //public void GetGold()
+    //{
+    //    timer += Time.deltaTime;
+    //    if (timer >= 1)
+    //    {
+    //        currentGold += gold
+    //    }
+    //}
+
 }
