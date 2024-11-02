@@ -36,7 +36,14 @@ public class Cats : MonoBehaviour
     {
         if (isContact)
         {
-            OnAttack();
+            if (hp > 0)
+            {
+                OnAttack();
+            }
+            else
+            {
+                OnDead();
+            }
             //Attack();
         }
         else
@@ -46,7 +53,7 @@ public class Cats : MonoBehaviour
             animalAnimation.Walk();
         }
 
-        IsDead();
+        //IsDead();
     }
 
     //¿òÁ÷ÀÓ
@@ -66,10 +73,10 @@ public class Cats : MonoBehaviour
     public void TakeDamage(float damage)
     {
         hp -= damage;
-        if (IsDead())
-        {
-            OnDead();
-        }
+        //if (IsDead())
+        //{
+        //    OnDead();
+        //}
     }
 
     public bool IsDead()
@@ -83,6 +90,13 @@ public class Cats : MonoBehaviour
 
     private void OnDead()
     {
+        StartCoroutine(DeleteCatObject());
+        animalAnimation.Sleep();
+    }
+
+    IEnumerator DeleteCatObject()
+    {
+        yield return new WaitForSeconds(2f);
         GameManager.Instance.cats.Remove(this);
         Destroy(gameObject);
     }

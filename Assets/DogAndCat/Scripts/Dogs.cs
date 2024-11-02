@@ -37,7 +37,14 @@ public class Dogs : MonoBehaviour
     {
         if (isContact)
         {
-            OnAttack();
+            if (hp > 0)
+            {
+                OnAttack();
+            }
+            else 
+            {
+                OnDead();
+            }
             //Attack();
         }
         else
@@ -46,7 +53,7 @@ public class Dogs : MonoBehaviour
             Move(gLeft);
             animalAnimation.Walk();
         }
-        IsDead();
+        //IsDead();
         //Attack();
         //Collider2D[] colliders = Physics2D.OverlapBoxAll(transform.position, new Vector2(attackRange, 2 * attackRange), 0);
         //foreach (Collider2D collider in colliders)
@@ -85,11 +92,15 @@ public class Dogs : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        hp -= damage;
-        if (IsDead())
+        if (hp >= 0)
         {
-            OnDead();
+            hp -= damage;
         }
+
+        //if (IsDead())
+        //{
+        //    OnDead();
+        //}
     }
 
     //죽었는지 살았는지 확인하는 함수
@@ -106,11 +117,16 @@ public class Dogs : MonoBehaviour
     //죽으면 뜨는 함수
     public void OnDead()
     {
+        StartCoroutine(DeleteDogObject());
+        animalAnimation.Sleep();
+    }
+
+    IEnumerator DeleteDogObject()
+    {
+        yield return new WaitForSeconds(2f);
         GameManager.Instance.dogs.Remove(this);
         Destroy(gameObject);
     }
-
-
     //public void OnTriggerEnter2D(Collider2D collision)
     //{
     //    if (collision.TryGetComponent<Cats>(out Cats cats))

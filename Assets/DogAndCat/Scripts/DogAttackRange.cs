@@ -20,6 +20,11 @@ public class DogAttackRange : MonoBehaviour
     {
         dog = transform.GetComponentInParent<Dogs>();
     }
+
+    private void Start()
+    {
+        
+    }
     private void Update()
     {
         var tmp = new List<Cats>();
@@ -68,6 +73,7 @@ public class DogAttackRange : MonoBehaviour
         if (collision.CompareTag("Enemy"))
         {
             StartCoroutine("AttackEnemyTower", dog.attackInterval);
+            dog.isContact = true;
         }
 
     }

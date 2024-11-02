@@ -24,15 +24,23 @@ public class UIManager : SingletonManager<UIManager>
     public TextMeshProUGUI goldText;
 
     private int playerLevel = 0;
+
     //자원 상한선
     public int[] maxGold = { 100, 150, 200, 250, 300, 350, 400 };
+    private int currentMaxGold;
     //레벨업 비용
-    public int[] levelUpCost = { 40, 80, 120, 160, 200, 240 };
+    public int[] levelUpCost = { 40, 80, 120, 160, 200, 240, 100 };
+    private int currentLevelUpCost;
     //초당 오르는 골드
     public int[] goldPerSecond = { 6, 10, 14, 18, 22, 26, 30 };
+    private int currentGoldPerSecond;
     //현재 보유중인 골드
-    private int currentGold = 0;
+    private int currentTotalGold = 0;
 
+    public TextMeshProUGUI levelValueText;
+    public TextMeshProUGUI levelUpCostText;
+
+    public Animator canLevelUpAnimation;
 
 
     protected override void Awake()
@@ -56,12 +64,30 @@ public class UIManager : SingletonManager<UIManager>
     private void Update()
     {
         UpdateSpawnDelay();
-        
+
+        //현재 정보에 대한 초기화 -> 레벨에 따라 달라짐
+        currentMaxGold = maxGold[playerLevel];
+        currentLevelUpCost = levelUpCost[playerLevel];
+        currentGoldPerSecond = goldPerSecond[playerLevel];
+
         if (Time.time > goldIncreasedTime + goldIncreaseInterval)
         {
-            StartCoroutine(SetGoldText(currentGold));
-            currentGold += goldPerSecond[playerLevel];
+            StartCoroutine(SetGoldText(currentTotalGold));
+            currentTotalGold += currentGoldPerSecond;
+            if (currentTotalGold >= currentMaxGold)
+            {
+                currentTotalGold = currentMaxGold;
+                StopCoroutine(SetGoldText(currentTotalGold));
+            }
             goldIncreasedTime = Time.time;
+        }
+
+        SetLevelValueText();
+        SetLevelUpCostText();
+
+        if (currentTotalGold >= currentLevelUpCost && playerLevel < 6)
+        {
+            canLevelUpAnimation.SetTrigger("canLevelUp");
         }
     }
 
@@ -91,25 +117,47 @@ public class UIManager : SingletonManager<UIManager>
         currentSpawnDelay[id - 1] = 0f;
     }
 
-    public float goldDisPlayDuration;
+    //몇초동안 보이게 할 것인지
+    public float goldDisPlayDuration = 0.5f;
 
     IEnumerator SetGoldText(int startGold)
     {
-        float startTime = Time.time;
+        //float startTime = Time.time;
         float endTime = Time.time + goldDisPlayDuration;
 
         while (Time.time < endTime)
         {
-            goldText.text = Mathf.Lerp(currentGold, startGold, (endTime - Time.time) / goldDisPlayDuration).ToString("n0");
+            //뒤에 goldDisPlayDuration 때문에 startGold에서부터 골드가 오르는 거다.
+            goldText.text = $"{Mathf.Lerp(currentTotalGold, startGold, (endTime - Time.time) / goldDisPlayDuration).ToString("n0")} / {currentMaxGold}원";
             yield return null;
         }
+    
     }
 
     public void LevelUp()
     {
-        if (currentGold >= maxGold[playerLevel])
+        if (playerLevel > 5)
         {
-            playerLevel++;
+            Debug.LogError("최고 레벨입니다.");
+            playerLevel = 6;
+            return;
         }
+        else if (currentTotalGold < currentLevelUpCost)
+        {
+            Debug.LogError("돈이 부족합니다");
+            return;
+        }
+        currentTotalGold -= currentLevelUpCost;
+        playerLevel++;
+    }
+
+    public void SetLevelValueText()
+    {
+        levelValueText.text = $"Lv : {playerLevel + 1}";
+    }
+
+    public void SetLevelUpCostText()
+    {
+        levelUpCostText.text = $"{currentLevelUpCost} 원";
     }
 }

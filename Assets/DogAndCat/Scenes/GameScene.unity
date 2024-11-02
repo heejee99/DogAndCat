@@ -170,59 +170,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &85628259
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 85628261}
-  - component: {fileID: 85628260}
-  m_Layer: 0
-  m_Name: UIManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &85628260
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 85628259}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7510262400d564c44b5f5212b1600fc8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SpawnButtonShadow: []
-  spawnDelayAmount: []
-  spawnDelayScale: []
-  goldText: {fileID: 0}
-  maxGold: 6400000096000000c8000000fa0000002c0100005e01000090010000
-  levelUpCost: 000000000000000000000000000000000000000000000000
-  goldPerSecond: 
-  goldIncreaseInterval: 1
-  goldDisPlayDuration: 0
---- !u!4 &85628261
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 85628259}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.1091244, y: 0.229881, z: -0.0194212}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &174239146
 GameObject:
   m_ObjectHideFlags: 0
@@ -586,8 +533,11 @@ MonoBehaviour:
   - 20
   goldText: {fileID: 1049133578}
   maxGold: 6400000096000000c8000000fa0000002c0100005e01000090010000
-  levelUpCost: 280000005000000078000000a0000000c8000000f0000000
+  levelUpCost: 280000005000000078000000a0000000c8000000f00000002c010000
   goldPerSecond: 060000000a0000000e00000012000000160000001a0000001e000000
+  levelValueText: {fileID: 439615153}
+  levelUpCostText: {fileID: 1190721130}
+  canLevelUpAnimation: {fileID: 615203334}
   goldIncreaseInterval: 1
   goldDisPlayDuration: 0.5
 --- !u!1 &340800009
@@ -1094,7 +1044,7 @@ GameObject:
   - component: {fileID: 439615154}
   - component: {fileID: 439615153}
   m_Layer: 5
-  m_Name: LevelText
+  m_Name: LevelValueText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1307,6 +1257,10 @@ PrefabInstance:
     - target: {fileID: 8417105603460280166, guid: 428aa974aab08494299047f1c4c8edb8, type: 3}
       propertyPath: m_Name
       value: Cat_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8417105603460280166, guid: 428aa974aab08494299047f1c4c8edb8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8417105603460280167, guid: 428aa974aab08494299047f1c4c8edb8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1596,6 +1550,7 @@ GameObject:
   - component: {fileID: 615203332}
   - component: {fileID: 615203331}
   - component: {fileID: 615203333}
+  - component: {fileID: 615203334}
   m_Layer: 5
   m_Name: LevelUpBackground
   m_TagString: Untagged
@@ -1706,7 +1661,40 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 615203331}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 237712611}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: LevelUp
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!95 &615203334
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 615203329}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: dec227e6a77b0464d8ba31be269b024e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &617954846
 GameObject:
   m_ObjectHideFlags: 0
@@ -2275,6 +2263,10 @@ PrefabInstance:
     - target: {fileID: 2050420350237877362, guid: ceb5aaec8529547058abd26798f2594b, type: 3}
       propertyPath: m_Name
       value: Cat_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2050420350237877362, guid: ceb5aaec8529547058abd26798f2594b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2050420350237877363, guid: ceb5aaec8529547058abd26798f2594b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3462,6 +3454,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cat_3
       objectReference: {fileID: 0}
+    - target: {fileID: 8975806096655124851, guid: 653d38ec7d2f547a7aae5499163002c5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4013,51 +4009,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.3748589, y: 1.4217178}
   m_EdgeRadius: 0
---- !u!1 &1738227559
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1738227561}
-  - component: {fileID: 1738227560}
-  m_Layer: 0
-  m_Name: AnimationManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1738227560
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1738227559}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dcdc5cbf446e4094eb3566a777774806, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animalAnimation: {fileID: 0}
---- !u!4 &1738227561
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1738227559}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.1091244, y: 0.229881, z: -0.0194212}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1745971782
 GameObject:
   m_ObjectHideFlags: 0
@@ -5156,7 +5107,6 @@ SceneRoots:
   m_Roots:
   - {fileID: 340800012}
   - {fileID: 1292981833}
-  - {fileID: 85628261}
   - {fileID: 1799305510}
   - {fileID: 1731830684}
   - {fileID: 237712610}
@@ -5171,4 +5121,3 @@ SceneRoots:
   - {fileID: 1911386792}
   - {fileID: 1845650553}
   - {fileID: 1115128851}
-  - {fileID: 1738227561}
