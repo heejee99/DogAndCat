@@ -18,6 +18,14 @@ public class Enemy : MonoBehaviour
     {
         GameManager.Instance.enemy = this;
     }
+
+    private void Update()
+    {
+        if (isDead)
+        {
+            OnDead();
+        }
+    }
     private void Start()
     {   maxHp = hp; 
         StartCoroutine("SpawnCat_1", 1);
@@ -54,11 +62,6 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        if (hp < 0)
-        {
-            return;
-        }
-
         hp -= damage;
         if (hp <= 0)
         {
@@ -70,9 +73,6 @@ public class Enemy : MonoBehaviour
 
     public void OnDead()
     {
-        if (isDead)
-        {
-            Destroy(gameObject);
-        }
+        Destroy(gameObject);
     }
 }

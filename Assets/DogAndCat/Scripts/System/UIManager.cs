@@ -43,10 +43,15 @@ public class UIManager : SingletonManager<UIManager>
 
     public Animator canLevelUpAnimation;
 
+    public int[] spawnValue = { 50, 100, 200, 400, 400};
+
+
+    private float hpBarAmount;
 
     protected override void Awake()
     {
         base.Awake();
+        
     }
     private void Start()
     {
@@ -111,11 +116,14 @@ public class UIManager : SingletonManager<UIManager>
     public void Spawn(int id)
     {
         //스폰이 안되면 바로 리턴으로 빠져나간다.
-        if (canSpawn[id - 1] == false)
+        if (canSpawn[id - 1] == false || currentTotalGold < spawnValue[id - 1])
         {
+            Debug.LogError("돈이 부족합니다");
             return;
         }
+
         GameManager.Instance.player.SpawnButton(id);
+        currentTotalGold -= spawnValue[id- 1];
         currentSpawnDelay[id - 1] = 0f;
     }
 
@@ -167,4 +175,6 @@ public class UIManager : SingletonManager<UIManager>
     {
         enemyHpText.text = $"{GameManager.Instance.enemy.hp.ToString()} / 1000";
     }
+
+    
 }

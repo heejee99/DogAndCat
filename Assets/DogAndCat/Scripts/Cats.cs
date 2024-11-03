@@ -5,6 +5,7 @@ using System.Collections.Generic;
 //using System.Xml.Serialization;
 //using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Cats : MonoBehaviour
 {
@@ -30,6 +31,13 @@ public class Cats : MonoBehaviour
     public float attackInterval = 1f; //공격주기
 
     public bool isRangeAttackType; //체크하면 광역공격, 아니면 단일공격
+
+    //체력바는 Cat에게 붙어있으니까 개개인이 관리하는걸로 하자
+    private float hpBarAmount { get { return hp / maxHp;  } }
+
+    public Image hpBar;
+
+    public bool drawGizmos;
 
     [Tooltip("자식에 있는 오브젝트를 넣어주세요.")]
     public AnimalAnimation animalAnimation;
@@ -71,6 +79,8 @@ public class Cats : MonoBehaviour
         {
             OnDead();
         }
+
+        hpBar.fillAmount = hpBarAmount;
     }
 
     //적 감지
@@ -188,6 +198,7 @@ public class Cats : MonoBehaviour
             hp = 0;
             isDead = true;
         }
+        
     }
 
     //public bool IsDead()
@@ -216,6 +227,21 @@ public class Cats : MonoBehaviour
         Destroy(gameObject);
     }
 
+    public void SetHpBarImage()
+    {
+        hpBar.fillAmount = hpBarAmount;
+    }
+
+
+    private void OnDrawGizmos()
+    {
+        if (drawGizmos)
+        {
+            Gizmos.DrawWireCube(new Vector2(transform.position.x + (attackRange_X / 2), transform.position.y)
+                , new Vector2(attackRange_X, attackRange_Y));
+            Gizmos.color = Color.yellow;
+        }
+    }
     //적 콜라이더를 감지함
     //private void OnTriggerEnter2D(Collider2D collision)
     //{

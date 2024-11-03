@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Dogs : MonoBehaviour
 {
@@ -19,7 +21,6 @@ public class Dogs : MonoBehaviour
 
     private bool isDead = false; //죽었는가?
 
-
     public bool isContact = false; //적을 만났는가?
 
     private Collider2D[] detectedEnemies = null; //만난 적을 담아둘 리스트
@@ -29,6 +30,11 @@ public class Dogs : MonoBehaviour
     public float attackInterval = 1f; //공격주기
     public bool isRangeAttackType; //체크하면 광역공격, 아니면 단일공격
 
+    private float hpBarAmount { get { return hp / maxHp; } } 
+    
+    public Image hpBar;
+
+    public bool drawGizmos;
 
     [Tooltip("자식에 있는 오브젝트를 넣어주세요.")]
     public AnimalAnimation animalAnimation;
@@ -93,6 +99,8 @@ public class Dogs : MonoBehaviour
         {
             OnDead();
         }
+
+        hpBar.fillAmount = hpBarAmount;
     }
 
     public void CheckEnemy()
@@ -112,7 +120,7 @@ public class Dogs : MonoBehaviour
                 //Debug.Log("적이 감지됨");
                 //적이 감지되면 멈춰야함 멈추고 나서 공격을 하던 말던 결정해야한다.
                 isContact = true;
-                //break; //적 찾으면 확인 안함
+                break; //적 찾으면 확인 안함
             }
 
         }
@@ -153,6 +161,9 @@ public class Dogs : MonoBehaviour
     //범위 공격
     public void OnRangeAttack()
     {
+        //살아있는 적을 저장할 리스트
+        List<Collider2D> aliveEnemies = new List<Collider2D>();
+
         foreach (var detectedEnemy in detectedEnemies)
         {
             if (detectedEnemy != null && detectedEnemy.CompareTag("Enemy"))
@@ -160,21 +171,27 @@ public class Dogs : MonoBehaviour
                 if (detectedEnemy.TryGetComponent<Enemy>(out Enemy enemy))
                 {
                     enemy.TakeDamage(damage);
-                    if (enemy.isDead)
+                    if (!enemy.isDead)
                     {
-                        isContact = false;
+                        aliveEnemies.Add(detectedEnemy); //살아있는 적만 추가
                     }
                 }
+
                 else if (detectedEnemy.TryGetComponent<Cats>(out Cats cat))
                 {
                     cat.TakeDamage(damage);
-                    if (cat.isDead)
+                    if (!cat.isDead)
                     {
-                        isContact = false;
+                        aliveEnemies.Add(detectedEnemy);
                     }
+
                 }
             }
         }
+
+        detectedEnemies = aliveEnemies.ToArray();
+        //감지된 적이 0보다 크면 true, 아니면 false
+        isContact = detectedEnemies.Length > 0;
     }
 
     //단일 공격
@@ -203,19 +220,23 @@ public class Dogs : MonoBehaviour
             if (closestEnemy.TryGetComponent<Enemy>(out Enemy enemy))
             {
                 enemy.TakeDamage(damage);
-                if (enemy.isDead)
+                if (!enemy.isDead)
                 {
-                    isContact = false;
+                    detectedEnemies = detectedEnemies.Where(e => e != closestEnemy).ToArray();
                 }
+
             }
             else if (closestEnemy.TryGetComponent<Cats>(out Cats cat))
             {
                 cat.TakeDamage(damage);
-                if (cat.isDead)
+                if (!cat.isDead)
                 {
-                    isContact = false;
+                    detectedEnemies = detectedEnemies.Where(e => e != closestEnemy).ToArray();
                 }
+
             }
+
+            isContact = detectedEnemies.Length > 0;
             print(closestEnemy.name);
         }
     }
@@ -257,6 +278,16 @@ public class Dogs : MonoBehaviour
         yield return new WaitForSeconds(2f);
         GameManager.Instance.dogs.Remove(this);
         Destroy(gameObject);
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (drawGizmos)
+        {
+            Gizmos.DrawWireCube(new Vector2(transform.position.x - (attackRange_X / 2),
+            transform.position.y), new Vector2(attackRange_X, attackRange_Y));
+            Gizmos.color = Color.yellow;
+        }
     }
     //public void OnTriggerEnter2D(Collider2D collision)
     //{
