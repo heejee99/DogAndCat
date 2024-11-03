@@ -57,7 +57,7 @@ public class DogAttackRange : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent(out Cats cats))
+        if (collision.TryGetComponent(out Cats cats) )
         {
             //중복 검사
             if (!detectedCatList.Contains(cats))
@@ -70,11 +70,11 @@ public class DogAttackRange : MonoBehaviour
             }
         }
 
-        if (collision.CompareTag("Enemy"))
-        {
-            StartCoroutine("AttackEnemyTower", dog.attackInterval);
-            dog.isContact = true;
-        }
+        //if (collision.CompareTag("Enemy"))
+        //{
+        //    StartCoroutine("AttackEnemyTower", dog.attackInterval);
+        //    dog.isContact = true;
+        //}
 
     }
 

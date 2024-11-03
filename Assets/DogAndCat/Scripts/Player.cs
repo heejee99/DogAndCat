@@ -38,4 +38,9 @@ public class Player : MonoBehaviour
         gold += (1/value) * Time.deltaTime * 100;
         return gold;
     }
+
+    public void TakeDamage(float damage)
+    {
+
+    }
 }

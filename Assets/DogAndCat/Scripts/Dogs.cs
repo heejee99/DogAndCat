@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,19 +6,28 @@ using UnityEngine;
 public class Dogs : MonoBehaviour
 {
     public float moveSpeed = 0.5f; //이동속도
+    public Vector2 moveDir; //움직이는 방향
     public float Scale = 0.6f; //크기
-    public float attackInterval = 1f; //공격주기
+
+    public float attackRange_X = 1f; //X축 공격 범위
+    public float attackRange_Y = 1f; //Y축 공격 범위
+
     public float hp = 50; //체력
     private float maxHp; //최대 체력
     public float damage = 8; //공격력
-    public float cost = 200; //생산비용
+    public float costValue = 200; //생산비용
 
     private bool isDead = false; //죽었는가?
 
-    public bool attackType; //공격 타입
 
     public bool isContact = false; //적을 만났는가?
 
+    private Collider2D[] detectedEnemies = null; //만난 적을 담아둘 리스트
+
+    private float startAttackTime; //공격을 시작한 시간
+
+    public float attackInterval = 1f; //공격주기
+    public bool isRangeAttackType; //체크하면 광역공격, 아니면 단일공격
 
 
     [Tooltip("자식에 있는 오브젝트를 넣어주세요.")]
@@ -30,95 +40,216 @@ public class Dogs : MonoBehaviour
     {
         //StartCoroutine(OnAttackRange());
         maxHp = hp;
+        //ResourcesManager에서 GameManager에 dogs를 담아줄거라 아래꺼는 취소
         //GameManager.Instance.dogs.Add(this);
     }
 
     private void Update()
     {
-        if (isContact)
+        //if (isContact)
+        //{
+        //    if (hp > 0)
+        //    {
+        //        OnAttack();
+        //    }
+        //    else 
+        //    {
+        //        OnDead();
+        //    }
+        //    //Attack();
+        //}
+        //else
+        //{
+        //    Vector2 gLeft = Vector2.left;
+        //    Move(gLeft);
+        //    animalAnimation.Walk();
+        //}
+        CheckEnemy();
+
+        if (!isDead)
         {
-            if (hp > 0)
+            //안만나면 계속 왼쪽으로 감
+            if (!isContact)
             {
-                OnAttack();
+                moveDir = Vector2.left;
             }
-            else 
+            //만나면 벡터값 0
+            else
             {
-                OnDead();
+                moveDir = Vector2.zero;
+                animalAnimation.Jump();
             }
-            //Attack();
+
+            Move(moveDir);
+
+            if (Time.time > startAttackTime + attackInterval && isContact)
+            {
+                startAttackTime = Time.time;
+                CheckAttackType(isRangeAttackType);
+            }
         }
+
         else
         {
-            Vector2 gLeft = Vector2.left;
-            Move(gLeft);
-            animalAnimation.Walk();
+            OnDead();
         }
-        //IsDead();
-        //Attack();
-        //Collider2D[] colliders = Physics2D.OverlapBoxAll(transform.position, new Vector2(attackRange, 2 * attackRange), 0);
-        //foreach (Collider2D collider in colliders)
-        //{
-        //    if (collider.CompareTag("Cat"))
-        //    {
-        //        Cats cat = collider.GetComponent<Cats>();
-        //        detectedCatList.Add(cat);
+    }
 
-        //        //if (cat != null && cat.GetComponent<Rigidbody2D>() != null)
-        //        //{
-        //        //    dog.AnimalAnimation.Jump();
-        //        //    cat.TakeDamage(dog.damage);
-        //        //    print("고양이 공격 받음");
-        //        //}
-        //        isContact = true;
-        //        print("공격 개시!");
-        //    }
-        //}
+    public void CheckEnemy()
+    {
+        //중심은 x좌표는 (공격 범위 / 2) 만큼 왼쪽으로 가고, y좌표는 그대로이다. 그리고 상자를 그려준다.
+        Collider2D[] enemyColliders = Physics2D.OverlapBoxAll(new Vector2(transform.position.x - (attackRange_X / 2),
+        transform.position.y), new Vector2(attackRange_X, attackRange_Y), 0);
+
+        //그냥 detectedEnemy = enemyColldiers해버리면 얕은 복사가 되어버리니까 이렇게 해줘야 한다
+        detectedEnemies = new Collider2D[enemyColliders.Length]; //배열 크기 선언
+        Array.Copy(enemyColliders, detectedEnemies, enemyColliders.Length);
+
+        foreach (var enemyCollider in enemyColliders)
+        {
+            if (enemyCollider.CompareTag("Enemy") && enemyCollider != null)
+            {
+                //Debug.Log("적이 감지됨");
+                //적이 감지되면 멈춰야함 멈추고 나서 공격을 하던 말던 결정해야한다.
+                isContact = true;
+                //break; //적 찾으면 확인 안함
+            }
+
+        }
     }
 
 
-    //움직임
+    //움직임, moveDir이 0일때 0이 아닐때를 구분
     public void Move(Vector2 moveDir)
     {
-        transform.localScale = new Vector3(Scale, Scale, Scale);
-        transform.Translate(moveDir * moveSpeed * Time.deltaTime);
+        if (moveDir.magnitude > 0)
+        {
+            transform.localScale = new Vector3(Scale, Scale, Scale);
+            transform.Translate(moveDir * moveSpeed * Time.deltaTime);
+            animalAnimation.Walk();
+        }
+        //moveDir.magnitude가 0이면 적을 만났다는거니까 공격을 계시. 근데 그 전에 공격 타입을 따져봐야함
+        else
+        {
+            transform.Translate(moveDir * moveSpeed * Time.deltaTime);
+        }
     }
 
-    public void OnAttack()
+    public void CheckAttackType(bool isRangeAttackType)
     {
-        //멈추고
-        Move(Vector2.zero);
-        animalAnimation.Jump();
+        if (isRangeAttackType)
+        {
+            print("범위공격");
+            OnRangeAttack();
+        }
+
+        else
+        {
+            print("단일공격");
+            OnDirectAttacK();
+        }
+    }
+
+    //범위 공격
+    public void OnRangeAttack()
+    {
+        foreach (var detectedEnemy in detectedEnemies)
+        {
+            if (detectedEnemy != null && detectedEnemy.CompareTag("Enemy"))
+            {
+                if (detectedEnemy.TryGetComponent<Enemy>(out Enemy enemy))
+                {
+                    enemy.TakeDamage(damage);
+                    if (enemy.isDead)
+                    {
+                        isContact = false;
+                    }
+                }
+                else if (detectedEnemy.TryGetComponent<Cats>(out Cats cat))
+                {
+                    cat.TakeDamage(damage);
+                    if (cat.isDead)
+                    {
+                        isContact = false;
+                    }
+                }
+            }
+        }
+    }
+
+    //단일 공격
+    public void OnDirectAttacK()
+    {
+        Collider2D closestEnemy = null;
+        float closestDistance = float.MaxValue;
+
+        foreach (var detectedEnemy in detectedEnemies)
+        {
+            if (detectedEnemy != null && detectedEnemy.CompareTag("Enemy"))
+            {
+                //타겟들과 dog와의 거리를 계산
+                float targetDistance = (detectedEnemy.transform.position - transform.position).magnitude;
+
+                if (targetDistance < closestDistance)
+                {
+                    closestDistance = targetDistance;
+                    closestEnemy = detectedEnemy;
+                }
+            }
+        }
+
+        if (closestEnemy != null)
+        {
+            if (closestEnemy.TryGetComponent<Enemy>(out Enemy enemy))
+            {
+                enemy.TakeDamage(damage);
+                if (enemy.isDead)
+                {
+                    isContact = false;
+                }
+            }
+            else if (closestEnemy.TryGetComponent<Cats>(out Cats cat))
+            {
+                cat.TakeDamage(damage);
+                if (cat.isDead)
+                {
+                    isContact = false;
+                }
+            }
+            print(closestEnemy.name);
+        }
     }
 
     public void TakeDamage(float damage)
     {
-        if (hp >= 0)
+        hp -= damage;
+        if (hp <= 0)
         {
-            hp -= damage;
+            hp = 0;
+            isDead = true;
         }
-
-        //if (IsDead())
-        //{
-        //    OnDead();
-        //}
     }
 
     //죽었는지 살았는지 확인하는 함수
-    public bool IsDead()
-    {
-        if (hp <= 0)
-        {
-            isDead = true;
-        }
+    //public bool IsDead()
+    //{
+    //    if (hp == -1)
+    //    {
+    //        isDead = true;
+    //        OnDead(isDead);
+    //    }
 
-        return isDead;
-    }
+    //    return isDead;
+    //}
 
     //죽으면 뜨는 함수
     public void OnDead()
     {
-        StartCoroutine(DeleteDogObject());
-        animalAnimation.Sleep();
+        if (isDead)
+        {
+            animalAnimation.Sleep();
+            StartCoroutine(DeleteDogObject());
+        }
     }
 
     IEnumerator DeleteDogObject()

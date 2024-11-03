@@ -537,9 +537,10 @@ MonoBehaviour:
   goldPerSecond: 060000000a0000000e00000012000000160000001a0000001e000000
   levelValueText: {fileID: 439615153}
   levelUpCostText: {fileID: 1190721130}
+  enemyHpText: {fileID: 352465995}
   canLevelUpAnimation: {fileID: 615203334}
   goldIncreaseInterval: 1
-  goldDisPlayDuration: 0.5
+  goldDisPlayDuration: 1
 --- !u!1 &340800009
 GameObject:
   m_ObjectHideFlags: 0
@@ -1250,17 +1251,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 6105542152155715001, guid: 428aa974aab08494299047f1c4c8edb8, type: 3}
-      propertyPath: isDead
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8417105603460280166, guid: 428aa974aab08494299047f1c4c8edb8, type: 3}
       propertyPath: m_Name
       value: Cat_1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8417105603460280166, guid: 428aa974aab08494299047f1c4c8edb8, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8417105603460280167, guid: 428aa974aab08494299047f1c4c8edb8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2263,10 +2256,6 @@ PrefabInstance:
     - target: {fileID: 2050420350237877362, guid: ceb5aaec8529547058abd26798f2594b, type: 3}
       propertyPath: m_Name
       value: Cat_2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2050420350237877362, guid: ceb5aaec8529547058abd26798f2594b, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2050420350237877363, guid: ceb5aaec8529547058abd26798f2594b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3313,6 +3302,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dog_1
       objectReference: {fileID: 0}
+    - target: {fileID: 1670153137979505563, guid: 568f99fd1652347dea8fbe843c4f1088, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3453,10 +3446,6 @@ PrefabInstance:
     - target: {fileID: 8975806096655124851, guid: 653d38ec7d2f547a7aae5499163002c5, type: 3}
       propertyPath: m_Name
       value: Cat_3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8975806096655124851, guid: 653d38ec7d2f547a7aae5499163002c5, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3960,10 +3949,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22ed9e81ab7945943af842783ade793f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 100
+  hp: 1000
   delayTimeForSpawnCat_1: 7
   delayTimeForSpawnCat_2: 10
   delayTimeForSpawnCat_3: 30
+  isDead: 0
 --- !u!61 &1731830687
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4314,7 +4304,7 @@ GameObject:
   - component: {fileID: 1799305512}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Dog
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

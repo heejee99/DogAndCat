@@ -12,6 +12,8 @@ public class Enemy : MonoBehaviour
     public float delayTimeForSpawnCat_2 = 10f;
     public float delayTimeForSpawnCat_3 = 30f;
 
+    public bool isDead = false;
+
     private void Awake()
     {
         GameManager.Instance.enemy = this;
@@ -52,7 +54,25 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
+        if (hp < 0)
+        {
+            return;
+        }
+
         hp -= damage;
+        if (hp <= 0)
+        {
+            hp = 0;
+            isDead = true;
+        }
         print("타워가 데미지를 입음");
+    }
+
+    public void OnDead()
+    {
+        if (isDead)
+        {
+            Destroy(gameObject);
+        }
     }
 }

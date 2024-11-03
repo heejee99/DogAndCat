@@ -39,6 +39,7 @@ public class UIManager : SingletonManager<UIManager>
 
     public TextMeshProUGUI levelValueText;
     public TextMeshProUGUI levelUpCostText;
+    public TextMeshProUGUI enemyHpText;
 
     public Animator canLevelUpAnimation;
 
@@ -84,6 +85,7 @@ public class UIManager : SingletonManager<UIManager>
 
         SetLevelValueText();
         SetLevelUpCostText();
+        SetEnemyHpText();
 
         if (currentTotalGold >= currentLevelUpCost && playerLevel < 6)
         {
@@ -159,5 +161,10 @@ public class UIManager : SingletonManager<UIManager>
     public void SetLevelUpCostText()
     {
         levelUpCostText.text = $"{currentLevelUpCost} ¿ø";
+    }
+
+    public void SetEnemyHpText()
+    {
+        enemyHpText.text = $"{GameManager.Instance.enemy.hp.ToString()} / 1000";
     }
 }

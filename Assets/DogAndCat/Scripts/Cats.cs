@@ -1,32 +1,42 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Xml.Serialization;
+//using System.Runtime.InteropServices;
+//using System.Xml.Serialization;
+//using Unity.VisualScripting;
 using UnityEngine;
 
 public class Cats : MonoBehaviour
 {
     public float moveSpeed = 0.5f; //이동속도
+    public Vector2 moveDir; //움직이는 방향
     public float Scale = 0.6f; //크기
-    public float attackInterval = 1f; //공격속도
+
+    public float attackRange_X = 1f; //X축 공격 범위
+    public float attackRange_Y = 1f; //Y축 공격 범위
+
     public float hp = 80; //체력
     private float maxHp; //최대 체력
     public float damage = 6; //공격력
-    public bool attackType; //공격 타입
 
-    public bool isDead = false; //죽었는지
+    public bool isDead = false; //죽었는가?
 
+    public bool isContact = false; //플레이어를 만났는가?
 
-    public bool isContact = false;
+    private Collider2D[] detectedPlayers = null;
+
+    private float startAttackTime;
+
+    public float attackInterval = 1f; //공격주기
+
+    public bool isRangeAttackType; //체크하면 광역공격, 아니면 단일공격
 
     [Tooltip("자식에 있는 오브젝트를 넣어주세요.")]
     public AnimalAnimation animalAnimation;
     //AnimalAnimation AnimalAnimation = new AnimalAnimation();
     //처음엔 위에처럼 작성했는데 참조가 되지 않아서 계속 오류가 나왔다. 그래서 그냥 CharacterAnimation에서 자식 컴포넌트에 있는
     //Animator을 직접 참조하게만 하고 나는 public으로 Animator가 있는 자식 오브젝트를 직접 참조하게 해주었다.
-    private void Awake()
-    {
-
-    }
+   
     private void Start()
     {
         maxHp = hp;
@@ -34,64 +44,169 @@ public class Cats : MonoBehaviour
 
     private void Update()
     {
-        if (isContact)
+        CheckEnemy();
+
+        if (!isDead)
         {
-            if (hp > 0)
+            if (!isContact)
             {
-                OnAttack();
+                moveDir = Vector2.right;
             }
             else
             {
-                OnDead();
+                moveDir = Vector2.zero;
+                animalAnimation.Jump();
             }
-            //Attack();
+
+            Move(moveDir);
+
+            if (Time.time > startAttackTime + attackInterval && isContact)
+            {
+                startAttackTime = Time.time;
+                CheckAttackType(isRangeAttackType);
+            }
+        }
+
+        else
+        {
+            OnDead();
+        }
+    }
+
+    //적 감지
+    public void CheckEnemy()
+    {
+        Collider2D[] playerColliders = Physics2D.OverlapBoxAll(new Vector2(transform.position.x + (attackRange_X / 2), transform.position.y)
+            , new Vector2(attackRange_X, attackRange_Y), 0);
+
+        detectedPlayers = new Collider2D[playerColliders.Length]; //배열 크기 초기화
+        Array.Copy(playerColliders, detectedPlayers, playerColliders.Length);
+
+        isContact = false; //기본값은 false로 초기화
+
+        foreach (var playerCollider in playerColliders)
+        {
+            if (playerCollider.CompareTag("Player"))
+            {
+                isContact = true;
+                break; //적 찾고나면 함수 out
+            }
+        }
+
+    }
+
+    //움직임, moveDir이 0일때 0이 아닐때를 구분
+    public void Move(Vector2 moveDir)
+    {
+        if (moveDir.magnitude > 0)
+        {
+            //Sprite를 뒤집어야 하므로 -Scale
+            transform.localScale = new Vector3(-Scale, Scale, Scale);
+            transform.Translate(moveDir * moveSpeed * Time.deltaTime);
+            animalAnimation.Walk();
         }
         else
         {
-            Vector2 goRight = Vector2.right;
-            Move(goRight);
-            animalAnimation.Walk();
+            transform.localScale = new Vector3(-Scale, Scale, Scale);
+            transform.Translate(moveDir * moveSpeed * Time.deltaTime);
+        }
+    }
+
+    public void CheckAttackType(bool isRangeAttackType)
+    {
+        if (isRangeAttackType)
+        {
+            print("범위공격");
+            OnRangeAttack();
         }
 
-        //IsDead();
+        else
+        {
+            print("단일공격");
+            OnDirectAttacK();
+        }
     }
 
-    //움직임
-    public void Move(Vector2 moveDir)
+    public void OnRangeAttack()
     {
-        transform.localScale = new Vector3(-Scale, Scale, Scale);
-        transform.Translate(moveDir * moveSpeed * Time.deltaTime);
+        foreach (var detectedPlayer in detectedPlayers)
+        {
+            if (detectedPlayer != null && detectedPlayer.CompareTag("Player"))
+            {
+                if (detectedPlayer.TryGetComponent<Player>(out Player player))
+                {
+                    player.TakeDamage(damage);
+                }
+                if (detectedPlayer.TryGetComponent<Dogs>(out Dogs dog))
+                {
+                    dog.TakeDamage(damage);
+                }
+            }
+        }
     }
 
-    public void OnAttack()
+    public void OnDirectAttacK()
     {
-        Move(Vector2.zero);
-        animalAnimation.Jump();
+        Collider2D closestPlayer = null;
+        float closestDistance = float.MaxValue;
+
+        foreach (var detectedPlayer in detectedPlayers)
+        {
+            if (detectedPlayer != null && detectedPlayer.CompareTag("Player"))
+            {
+                float targetDistance = (detectedPlayer.transform.position - transform.position).magnitude;
+                
+                if (targetDistance < closestDistance)
+                {
+                    closestDistance = targetDistance;
+                    closestPlayer = detectedPlayer;
+                }
+            }
+        }
+
+        if (closestPlayer != null)
+        {
+            if (closestPlayer.TryGetComponent<Player>(out Player player))
+            {
+                player.TakeDamage(damage);
+            }
+            //단일 공격은 어짜피 한명만 공격하기 때문에 범위 공격과 다르게 else if를 씀
+            else if (closestPlayer.TryGetComponent<Dogs>(out Dogs dog))
+            {
+                dog.TakeDamage(damage);
+            }
+            print(closestPlayer);
+        }
     }
 
     //데미지 입음
     public void TakeDamage(float damage)
     {
         hp -= damage;
-        //if (IsDead())
-        //{
-        //    OnDead();
-        //}
-    }
-
-    public bool IsDead()
-    {
         if (hp <= 0)
         {
+            hp = 0;
             isDead = true;
         }
-        return isDead;
     }
 
-    private void OnDead()
+    //public bool IsDead()
+    //{
+    //    if (hp <= -1)
+    //    {
+    //        isDead = true;
+    //        OnDead(isDead);
+    //    }
+    //    return isDead;
+    //}
+
+    public void OnDead()
     {
-        StartCoroutine(DeleteCatObject());
-        animalAnimation.Sleep();
+        if (isDead)
+        {
+            animalAnimation.Sleep();
+            StartCoroutine(DeleteCatObject());
+        }
     }
 
     IEnumerator DeleteCatObject()
