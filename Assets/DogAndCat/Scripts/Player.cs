@@ -13,6 +13,8 @@ public class Player : MonoBehaviour
 
     public int value = 6;
 
+    public bool isDead = false;
+
     private void Awake()
     {
         GameManager.Instance.player = this;

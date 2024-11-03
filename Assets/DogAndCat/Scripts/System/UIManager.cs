@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -40,13 +41,23 @@ public class UIManager : SingletonManager<UIManager>
     public TextMeshProUGUI levelValueText;
     public TextMeshProUGUI levelUpCostText;
     public TextMeshProUGUI enemyHpText;
+    public TextMeshProUGUI playerHpText;
+
+    //돈이 없을때 마다 떠야하니까 프리팹으로 만들어줬다.
+    public GameObject goldErrorTextPrefab;
+    public Transform goldErrorTextPosition;
 
     public Animator canLevelUpAnimation;
+
+    //스폰하기에 충분한 돈을 가지고 있는지
+    private bool haveSpawnValue;
 
     public int[] spawnValue = { 50, 100, 200, 400, 400};
 
 
     private float hpBarAmount;
+
+    Vector3 originPos;
 
     protected override void Awake()
     {
@@ -83,7 +94,7 @@ public class UIManager : SingletonManager<UIManager>
             if (currentTotalGold >= currentMaxGold)
             {
                 currentTotalGold = currentMaxGold;
-                StopCoroutine(SetGoldText(currentTotalGold));
+                //StopCoroutine(SetGoldText(currentTotalGold));
             }
             goldIncreasedTime = Time.time;
         }
@@ -96,6 +107,7 @@ public class UIManager : SingletonManager<UIManager>
         {
             canLevelUpAnimation.SetTrigger("canLevelUp");
         }
+        
     }
 
     private void UpdateSpawnDelay()
@@ -118,10 +130,13 @@ public class UIManager : SingletonManager<UIManager>
         //스폰이 안되면 바로 리턴으로 빠져나간다.
         if (canSpawn[id - 1] == false || currentTotalGold < spawnValue[id - 1])
         {
+            haveSpawnValue = false;
             Debug.LogError("돈이 부족합니다");
+            StartCoroutine(SetGoldErrorText());
             return;
         }
 
+        haveSpawnValue = true;
         GameManager.Instance.player.SpawnButton(id);
         currentTotalGold -= spawnValue[id- 1];
         currentSpawnDelay[id - 1] = 0f;
@@ -155,6 +170,7 @@ public class UIManager : SingletonManager<UIManager>
         else if (currentTotalGold < currentLevelUpCost)
         {
             Debug.LogError("돈이 부족합니다");
+            StartCoroutine(SetGoldErrorText());
             return;
         }
         currentTotalGold -= currentLevelUpCost;
@@ -175,6 +191,28 @@ public class UIManager : SingletonManager<UIManager>
     {
         enemyHpText.text = $"{GameManager.Instance.enemy.hp.ToString()} / 1000";
     }
+    public void SetPlayerHpText()
+    {
+        playerHpText.text = $"{GameManager.Instance.player.hp.ToString()} / 1000";
+    }
 
-    
+    public float showDelayGoldErrorText = 1f;
+    public float currentTimeGoldErrorText;
+
+    //돈이 부족한 에러 메시지를 띄우고 싶은데 잘 안된다. -> 프리팹을 만들면 될듯 !
+    IEnumerator SetGoldErrorText()
+    {
+        GameObject goldErrorText = Instantiate(goldErrorTextPrefab, goldErrorTextPosition);
+        //Vector3 tartgetPos = goldErrorTextPosition.transform.position + Vector3.up * 10;
+        goldErrorText.transform.localPosition = Vector3.zero; // Vector3.Lerp(goldErrorText.transform.localPosition, tartgetPos, Time.time);
+        goldErrorText.transform.localRotation = Quaternion.identity;
+
+        //TextMeshProUGUI goldErrorTextMesh = goldErrorText.GetComponent<TextMeshProUGUI>();
+        //if (goldErrorTextMesh != null)
+        //{
+        //    goldErrorTextMesh.color = Mathf.Lerp(goldErrorTextMesh.color.a, )
+        //}
+        yield return new WaitForSeconds(2f);
+        Destroy(goldErrorText);
+    }
 }

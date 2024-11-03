@@ -1,11 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+
 //using System.Runtime.InteropServices;
 //using System.Xml.Serialization;
 //using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class Cats : MonoBehaviour
 {
@@ -26,8 +29,7 @@ public class Cats : MonoBehaviour
 
     private Collider2D[] detectedPlayers = null;
 
-    private float startAttackTime;
-
+    private float startAttackTime; //공격을 시작한 시간
     public float attackInterval = 1f; //공격주기
 
     public bool isRangeAttackType; //체크하면 광역공격, 아니면 단일공격
@@ -96,7 +98,7 @@ public class Cats : MonoBehaviour
 
         foreach (var playerCollider in playerColliders)
         {
-            if (playerCollider.CompareTag("Player"))
+            if (playerCollider.CompareTag("Player") && playerCollider != null)
             {
                 isContact = true;
                 break; //적 찾고나면 함수 out
@@ -139,6 +141,9 @@ public class Cats : MonoBehaviour
 
     public void OnRangeAttack()
     {
+        //살아있는 플레이어를 저장할 리스트
+        List<Collider2D> aliveplayers = new List<Collider2D>();
+
         foreach (var detectedPlayer in detectedPlayers)
         {
             if (detectedPlayer != null && detectedPlayer.CompareTag("Player"))
@@ -146,13 +151,27 @@ public class Cats : MonoBehaviour
                 if (detectedPlayer.TryGetComponent<Player>(out Player player))
                 {
                     player.TakeDamage(damage);
+                    if (!player.isDead)
+                    {
+                        aliveplayers.Add(detectedPlayer);
+                    }
                 }
-                if (detectedPlayer.TryGetComponent<Dogs>(out Dogs dog))
+
+                else if (detectedPlayer.TryGetComponent<Dogs>(out Dogs dog))
                 {
                     dog.TakeDamage(damage);
+                    if (!dog.isDead)
+                    {
+                        aliveplayers.Add(detectedPlayer);
+                    }
                 }
             }
         }
+
+        //감지된 적을 다시 초기화
+        detectedPlayers = aliveplayers.ToArray();
+        //감지된 적이 0보다 크면 true, 아니면 false
+        isContact = detectedPlayers.Length > 0;
     }
 
     public void OnDirectAttacK()
@@ -179,13 +198,23 @@ public class Cats : MonoBehaviour
             if (closestPlayer.TryGetComponent<Player>(out Player player))
             {
                 player.TakeDamage(damage);
+                if (!player.isDead)
+                {
+                    detectedPlayers = detectedPlayers.Where(e => e != closestPlayer).ToArray();
+                }
             }
             //단일 공격은 어짜피 한명만 공격하기 때문에 범위 공격과 다르게 else if를 씀
             else if (closestPlayer.TryGetComponent<Dogs>(out Dogs dog))
             {
                 dog.TakeDamage(damage);
+                if (!player.isDead)
+                {
+                    detectedPlayers = detectedPlayers.Where(e => e != closestPlayer).ToArray();
+                }
             }
-            print(closestPlayer);
+
+            isContact = detectedPlayers.Length > 0;
+            print(closestPlayer.name);
         }
     }
 
@@ -226,12 +255,6 @@ public class Cats : MonoBehaviour
         GameManager.Instance.cats.Remove(this);
         Destroy(gameObject);
     }
-
-    public void SetHpBarImage()
-    {
-        hpBar.fillAmount = hpBarAmount;
-    }
-
 
     private void OnDrawGizmos()
     {
