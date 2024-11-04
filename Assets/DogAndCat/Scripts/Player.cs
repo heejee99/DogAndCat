@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Unity.Collections;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -12,6 +13,7 @@ public class Player : MonoBehaviour
     public int level = 1;
     public int exp = 0;
     public float hp;
+    public float specialMoveDamage = 100f;
 
     public int value = 6;
 
@@ -87,32 +89,12 @@ public class Player : MonoBehaviour
         //currentSpecialMoveCoolTime = Time.time;
     }
 
+    //필살기 범위
+    public float specialMoveAttackRange_X = 7.8f;
+    public float specialMoveAttackRange_Y = 4f;
+
     public void SpecialMoveAttack()
     {
-        //float endTime = Time.time + currentSpeicalMoveDuration;
-        //startPos = new Vector2(transform.position.x, 0);
-        //Vector2 endPos = Vector2.zero; 
-        //int count = 0;
-        //while (Time.time < endTime)
-        //{
-        //    count++;
-        //    print($"반복횟수 : {count}");
-        //    float t = (endTime - Time.time) / currentSpeicalMoveDuration;
-        //    Vector2 diraction = Vector2.Lerp(startPos, endPos, 1 - t);
-        //    RaycastHit2D hit = Physics2D.Raycast(startPos, diraction.normalized);
-        //    Debug.DrawRay(startPos, diraction.normalized * 10, Color.red);
-
-        //    if(hit.collider != null)
-        //    {
-        //        Debug.Log("Hit : " + hit.collider.name);
-        //    }
-        //    if (count > 100)
-        //    {
-        //        break;
-        //    }
-        //    yield return null;
-        //}
-        //지난 시간이 쿨타임보다 짧으면 못 씀
         if (isCoolTime)
         {
             StartCoroutine(SetCoolTimeErrorText());
@@ -123,14 +105,35 @@ public class Player : MonoBehaviour
         GameObject specialMoveEffect = Instantiate(specialMoveEffectPrefabs, transform);
         specialMoveEffect.transform.localPosition = new Vector3(-3.8f, -1, 0);
         currentSpecialMoveCoolTime = Time.time;
+
         //실제로 데미지 주기
+        Collider2D[] enemyColliders = Physics2D.OverlapBoxAll(new Vector2(transform.position.x - (specialMoveAttackRange_X / 2), transform.position.y)
+            , new Vector2(specialMoveAttackRange_X, specialMoveAttackRange_Y), 0);
+        foreach (var enemyCollider in enemyColliders)
+        {
+            if (enemyCollider.TryGetComponent<Cats>(out Cats cat))
+            {
+                cat.TakeDamage(specialMoveDamage);
+                cat.transform.position -= Vector3.right * 2;
+            }
+            
+        }
+
+        //끝나고나면 배열 지우기
+        enemyColliders = null;
     }
 
-    //IEnumerator OnSpecialMoveText()
-    //{
-    //    UIManager.Instance.SetCoolTimeErrorText();
-    //    yield return new WaitForSeconds(specialMoveCooltimeduration);
-    //}
+    //기즈모 그릴것인가?
+    public bool drawGizmosSpecialMoveAttackRange;
+    private void OnDrawGizmos()
+    {
+        if (drawGizmosSpecialMoveAttackRange)
+        {
+            Gizmos.DrawWireCube(new Vector2(transform.position.x - (specialMoveAttackRange_X / 2),
+            transform.position.y), new Vector2(specialMoveAttackRange_X, specialMoveAttackRange_Y));
+            Gizmos.color = Color.yellow;
+        }
+    }
 
     IEnumerator SetCoolTimeErrorText()
     {

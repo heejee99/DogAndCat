@@ -3910,11 +3910,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1670153137979505562, guid: 568f99fd1652347dea8fbe843c4f1088, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.18
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1670153137979505562, guid: 568f99fd1652347dea8fbe843c4f1088, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.05
+      value: -2.17
       objectReference: {fileID: 0}
     - target: {fileID: 1670153137979505562, guid: 568f99fd1652347dea8fbe843c4f1088, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3954,7 +3954,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1670153137979505563, guid: 568f99fd1652347dea8fbe843c4f1088, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3400864081141361848, guid: 568f99fd1652347dea8fbe843c4f1088, type: 3}
       propertyPath: damage
@@ -5043,6 +5043,7 @@ MonoBehaviour:
   level: 1
   exp: 0
   hp: 0
+  specialMoveDamage: 50
   value: 6
   isDead: 0
   coolTimeErrorTextPrefab: {fileID: 977368769728953575, guid: 8f4a9e92ce9a2fd42a593003ac10795a, type: 3}
@@ -5050,6 +5051,9 @@ MonoBehaviour:
   specialMoveEffectPrefabs: {fileID: 120778, guid: 632339e29e2ddd64aab6f9dd68facc82, type: 3}
   specialMoveCoolTimeduration: 2
   isCoolTime: 1
+  specialMoveAttackRange_X: 7.8
+  specialMoveAttackRange_Y: 8.59
+  drawGizmosSpecialMoveAttackRange: 0
 --- !u!61 &1799305512
 BoxCollider2D:
   m_ObjectHideFlags: 0
