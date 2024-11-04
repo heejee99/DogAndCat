@@ -72,33 +72,31 @@ public class Dogs : MonoBehaviour
         //}
         CheckEnemy();
 
-        if (!isDead)
+        if (isDead)
         {
-            //안만나면 계속 왼쪽으로 감
-            if (!isContact)
-            {
-                moveDir = Vector2.left;
-            }
-            //만나면 벡터값 0
-            else
-            {
-                moveDir = Vector2.zero;
-                animalAnimation.Jump();
-            }
-
-            Move(moveDir);
-
-            if (Time.time > startAttackTime + attackInterval && isContact)
-            {
-                startAttackTime = Time.time;
-                CheckAttackType(isRangeAttackType);
-            }
+            return;
         }
-
+        //안만나면 계속 왼쪽으로 감
+        if (!isContact)
+        {
+            moveDir = Vector2.left;
+        }
+        //만나면 벡터값 0
         else
         {
-            OnDead();
+            moveDir = Vector2.zero;
+            animalAnimation.Jump();
         }
+
+        Move(moveDir);
+
+        if (Time.time > startAttackTime + attackInterval && isContact)
+        {
+            startAttackTime = Time.time;
+            CheckAttackType(isRangeAttackType);
+        }
+
+
 
         hpBar.fillAmount = hpBarAmount;
     }
@@ -248,6 +246,7 @@ public class Dogs : MonoBehaviour
         {
             hp = 0;
             isDead = true;
+            OnDead(); 
         }
     }
 
@@ -263,12 +262,16 @@ public class Dogs : MonoBehaviour
     //    return isDead;
     //}
 
+    public GameObject deathParticlePrefab;
     //죽으면 뜨는 함수
     public void OnDead()
     {
         if (isDead)
         {
             animalAnimation.Sleep();
+            GameObject deathParticle = Instantiate(deathParticlePrefab, transform);
+            deathParticle.transform.localPosition = Vector3.zero;
+            deathParticle.transform.localRotation = Quaternion.identity;
             StartCoroutine(DeleteDogObject());
         }
     }

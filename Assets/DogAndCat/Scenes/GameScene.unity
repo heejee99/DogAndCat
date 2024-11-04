@@ -3954,7 +3954,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1670153137979505563, guid: 568f99fd1652347dea8fbe843c4f1088, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3400864081141361848, guid: 568f99fd1652347dea8fbe843c4f1088, type: 3}
       propertyPath: damage
@@ -3972,6 +3972,10 @@ PrefabInstance:
       propertyPath: isRangeAttackType
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3400864081141361848, guid: 568f99fd1652347dea8fbe843c4f1088, type: 3}
+      propertyPath: deathParticlePrefab
+      value: 
+      objectReference: {fileID: 158308, guid: 96a96c08c36361544affb3c783e0056e, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
