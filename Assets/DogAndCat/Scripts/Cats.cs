@@ -207,7 +207,7 @@ public class Cats : MonoBehaviour
             else if (closestPlayer.TryGetComponent<Dogs>(out Dogs dog))
             {
                 dog.TakeDamage(damage);
-                if (!player.isDead)
+                if (!dog.isDead)
                 {
                     detectedPlayers = detectedPlayers.Where(e => e != closestPlayer).ToArray();
                 }

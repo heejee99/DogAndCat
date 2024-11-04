@@ -45,6 +45,8 @@ public class UIManager : SingletonManager<UIManager>
 
     //돈이 없을때 마다 떠야하니까 프리팹으로 만들어줬다.
     public GameObject goldErrorTextPrefab;
+    public GameObject coolTimeErrorTextPrefab;
+
     public Transform goldErrorTextPosition;
 
     public Animator canLevelUpAnimation;
@@ -58,6 +60,8 @@ public class UIManager : SingletonManager<UIManager>
     private float hpBarAmount;
 
     Vector3 originPos;
+
+    public Animator specialMoveAnimation;
 
     protected override void Awake()
     {
@@ -108,6 +112,10 @@ public class UIManager : SingletonManager<UIManager>
             canLevelUpAnimation.SetTrigger("canLevelUp");
         }
         
+        if (!GameManager.Instance.player.isCoolTime)
+        {
+            specialMoveAnimation.SetTrigger("onCoolTime");
+        }
     }
 
     private void UpdateSpawnDelay()
@@ -215,4 +223,17 @@ public class UIManager : SingletonManager<UIManager>
         yield return new WaitForSeconds(2f);
         Destroy(goldErrorText);
     }
+
+    //IEnumerator SetCoolTimeErrorText()
+    //{
+    //    if (GameManager.Instance.player.isSpecialMoveCoolTime())
+    //    {
+    //        GameObject coolTimeErrorText = Instantiate(coolTimeErrorTextPrefab, goldErrorTextPosition);
+    //        coolTimeErrorText.transform.localPosition = Vector3.zero; // Vector3.Lerp(goldErrorText.transform.localPosition, tartgetPos, Time.time);
+    //        coolTimeErrorText.transform.localRotation = Quaternion.identity;
+    //        yield return new WaitForSeconds(2f);
+    //        Destroy(coolTimeErrorText);
+    //    }
+        
+    //}
 }
