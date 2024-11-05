@@ -32,8 +32,9 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        currentSpecialMoveCoolTime = 0f;
         maxHp = hp;
+        currentSpecialMoveCoolTime = -specialMoveCoolTimeduration;
+        isCoolTime = false;
     }
 
     private void Update()
@@ -75,6 +76,8 @@ public class Player : MonoBehaviour
 
     public void OnDead()
     {
+        currentSpecialMoveCoolTime = 0;
+        isCoolTime = false;
         Destroy(gameObject);
     }
 
