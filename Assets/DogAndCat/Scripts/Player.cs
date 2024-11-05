@@ -12,7 +12,8 @@ public class Player : MonoBehaviour
     public float gold = 0f;
     public int level = 1;
     public int exp = 0;
-    public float hp;
+    public float hp = 1000;
+    public float maxHp;
     public float specialMoveDamage = 100f;
 
     public int value = 6;
@@ -21,6 +22,7 @@ public class Player : MonoBehaviour
 
     public GameObject coolTimeErrorTextPrefab;
     public Transform coolTimeErrorTextPosition;
+    float currentSpecialMoveCoolTime = 0f;
 
     private void Awake()
     {
@@ -30,6 +32,8 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
+        currentSpecialMoveCoolTime = 0f;
+        maxHp = hp;
     }
 
     private void Update()
@@ -40,6 +44,11 @@ public class Player : MonoBehaviour
         //    StartCoroutine(SpecialMoveAttack());
         //}
         isSpecialMoveCoolTime();
+
+        if (isDead)
+        {
+            OnDead();
+        }
     }
 
     public void SpawnButton(int id)
@@ -55,8 +64,20 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-
+        hp -= damage;
+        if (hp <= 0)
+        {
+            hp = 0;
+            isDead = true;
+        }
+        print("타워가 데미지를 입음");
     }
+
+    public void OnDead()
+    {
+        Destroy(gameObject);
+    }
+
 
     //private float currentSpeicalMoveAttackTime;
     //private float currentSpeicalMoveDuration = 1f;
@@ -67,7 +88,6 @@ public class Player : MonoBehaviour
     public GameObject specialMoveEffectPrefabs;
 
     public float specialMoveCoolTimeduration = 2f;
-    float currentSpecialMoveCoolTime = 0f;
     public bool isCoolTime = true;
 
     //필살기가 쿨타임인지 불타입으로 리턴해주는 함수

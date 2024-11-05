@@ -36,6 +36,8 @@ public class Dogs : MonoBehaviour
 
     public bool drawGizmos;
 
+    public LayerMask TargetLayer;
+
     [Tooltip("자식에 있는 오브젝트를 넣어주세요.")]
     public AnimalAnimation animalAnimation;
     //AnimalAnimation AnimalAnimation = new AnimalAnimation();
@@ -85,6 +87,7 @@ public class Dogs : MonoBehaviour
         else
         {
             moveDir = Vector2.zero;
+            
             animalAnimation.Jump();
         }
 
@@ -105,7 +108,7 @@ public class Dogs : MonoBehaviour
     {
         //중심은 x좌표는 (공격 범위 / 2) 만큼 왼쪽으로 가고, y좌표는 그대로이다. 그리고 상자를 그려준다.
         Collider2D[] enemyColliders = Physics2D.OverlapBoxAll(new Vector2(transform.position.x - (attackRange_X / 2),transform.position.y)
-            , new Vector2(attackRange_X, attackRange_Y), 0);
+            , new Vector2(attackRange_X, attackRange_Y), 0, TargetLayer);
 
         //그냥 detectedEnemy = enemyColldiers해버리면 얕은 복사가 되어버리니까 이렇게 해줘야 한다
         detectedEnemies = new Collider2D[enemyColliders.Length]; //배열 크기 선언
@@ -242,11 +245,14 @@ public class Dogs : MonoBehaviour
     public void TakeDamage(float damage)
     {
         hp -= damage;
+        print("공격받음");
         if (hp <= 0)
         {
+            print("죽음");
             hp = 0;
             isDead = true;
-            OnDead(); 
+            OnDead();
+
         }
     }
 
@@ -268,10 +274,10 @@ public class Dogs : MonoBehaviour
     {
         if (isDead)
         {
+            //GameObject deathParticle = Instantiate(deathParticlePrefab, transform);
+            //deathParticle.transform.localPosition = Vector3.zero;
+            //deathParticle.transform.localRotation = Quaternion.identity;
             animalAnimation.Sleep();
-            GameObject deathParticle = Instantiate(deathParticlePrefab, transform);
-            deathParticle.transform.localPosition = Vector3.zero;
-            deathParticle.transform.localRotation = Quaternion.identity;
             StartCoroutine(DeleteDogObject());
         }
     }

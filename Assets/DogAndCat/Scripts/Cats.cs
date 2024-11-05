@@ -41,6 +41,8 @@ public class Cats : MonoBehaviour
 
     public bool drawGizmos;
 
+    public LayerMask TargetLayer;
+
     [Tooltip("자식에 있는 오브젝트를 넣어주세요.")]
     public AnimalAnimation animalAnimation;
     //AnimalAnimation AnimalAnimation = new AnimalAnimation();
@@ -89,7 +91,7 @@ public class Cats : MonoBehaviour
     public void CheckEnemy()
     {
         Collider2D[] playerColliders = Physics2D.OverlapBoxAll(new Vector2(transform.position.x + (attackRange_X / 2), transform.position.y)
-            , new Vector2(attackRange_X, attackRange_Y), 0);
+            , new Vector2(attackRange_X, attackRange_Y), 0, TargetLayer);
 
         detectedPlayers = new Collider2D[playerColliders.Length]; //배열 크기 초기화
         Array.Copy(playerColliders, detectedPlayers, playerColliders.Length);
@@ -218,9 +220,13 @@ public class Cats : MonoBehaviour
         }
     }
 
+    //public GameObject takeDamageEffectPrefab;
     //데미지 입음
     public void TakeDamage(float damage)
     {
+        //GameObject tmp = Instantiate(takeDamageEffectPrefab, transform);
+        //tmp.transform.localPosition = Vector3.zero;
+        //tmp.transform.localRotation = Quaternion.identity;
         hp -= damage;
         if (hp <= 0)
         {
@@ -253,6 +259,7 @@ public class Cats : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
         GameManager.Instance.cats.Remove(this);
+        if (gameObject != null)
         Destroy(gameObject);
     }
 

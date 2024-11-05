@@ -426,6 +426,10 @@ PrefabInstance:
       value: Cat_2
       objectReference: {fileID: 0}
     - target: {fileID: 5915916315965324249, guid: 3a8e2ad4012244b808c7e804940b570c, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5915916315965324249, guid: 3a8e2ad4012244b808c7e804940b570c, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -626,19 +630,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89b75181d41b2d344b65643a807607f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 0.5
+  moveSpeed: 0.9
   moveDir: {x: 0, y: 0}
   Scale: 0.6
-  attackRange_X: 3
+  attackRange_X: 2
   attackRange_Y: 6
-  hp: 90
-  damage: 6
+  hp: 200
+  damage: 10
   isDead: 0
   isContact: 0
   attackInterval: 1
-  isRangeAttackType: 0
-  hpBarAmount: 0
+  isRangeAttackType: 1
   hpBar: {fileID: 189521573265981642}
+  drawGizmos: 0
+  TargetLayer:
+    serializedVersion: 2
+    m_Bits: 64
   animalAnimation: {fileID: 1272089070829364511}
 --- !u!61 &3277623066504265326
 BoxCollider2D:

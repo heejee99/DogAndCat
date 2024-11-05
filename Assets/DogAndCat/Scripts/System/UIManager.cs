@@ -5,6 +5,7 @@ using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIManager : SingletonManager<UIManager> 
@@ -63,6 +64,7 @@ public class UIManager : SingletonManager<UIManager>
 
     public Animator specialMoveAnimation;
 
+
     protected override void Awake()
     {
         base.Awake();
@@ -106,6 +108,7 @@ public class UIManager : SingletonManager<UIManager>
         SetLevelValueText();
         SetLevelUpCostText();
         SetEnemyHpText();
+        SetPlayerHpText();
 
         if (currentTotalGold >= currentLevelUpCost && playerLevel < 6)
         {
@@ -116,6 +119,9 @@ public class UIManager : SingletonManager<UIManager>
         {
             specialMoveAnimation.SetTrigger("onCoolTime");
         }
+
+        //지면 이미지 켜짐
+        OnDefeatImage();
     }
 
     private void UpdateSpawnDelay()
@@ -197,11 +203,11 @@ public class UIManager : SingletonManager<UIManager>
 
     public void SetEnemyHpText()
     {
-        enemyHpText.text = $"{GameManager.Instance.enemy.hp.ToString()} / 1000";
+        enemyHpText.text = $"{GameManager.Instance.enemy.hp} / {GameManager.Instance.enemy.maxHp}";
     }
     public void SetPlayerHpText()
     {
-        playerHpText.text = $"{GameManager.Instance.player.hp.ToString()} / 1000";
+        playerHpText.text = $"{GameManager.Instance.player.hp} / {GameManager.Instance.player.maxHp}";
     }
 
     public float showDelayGoldErrorText = 1f;
@@ -221,9 +227,36 @@ public class UIManager : SingletonManager<UIManager>
         //    goldErrorTextMesh.color = Mathf.Lerp(goldErrorTextMesh.color.a, )
         //}
         yield return new WaitForSeconds(2f);
-        Destroy(goldErrorText);
+
+        //다시 게임을 시작할때 참조가 안될 수 있다.
+        if (goldErrorText != null)
+        {
+            Destroy(goldErrorText);
+        }
     }
 
+    public Button reStartButton;
+    //플레이어 체력이 0이되면 패배창 활성화
+    public GameObject defeatImage;
+    public void OnDefeatImage()
+    {
+        if (GameManager.Instance.player.isDead)
+        {
+            //다시 게임을 시작할때 참조가 안될 수 있다.
+            if (defeatImage != null)
+            {
+                defeatImage.SetActive(true);
+            }
+        }
+    }
+
+    public void ClickReStartButton()
+    {
+        if (reStartButton != null)
+        {
+            SceneManager.LoadScene("MainMenuScene");
+        }
+    }
     //IEnumerator SetCoolTimeErrorText()
     //{
     //    if (GameManager.Instance.player.isSpecialMoveCoolTime())
@@ -234,6 +267,6 @@ public class UIManager : SingletonManager<UIManager>
     //        yield return new WaitForSeconds(2f);
     //        Destroy(coolTimeErrorText);
     //    }
-        
+
     //}
 }

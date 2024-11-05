@@ -315,7 +315,7 @@ GameObject:
   - component: {fileID: 2497547882077171014}
   - component: {fileID: 3901102037832366900}
   - component: {fileID: 530115820162220855}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Dog_2
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -351,19 +351,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 937e4f28099db474daeef5cf863a2416, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 0.5
+  moveSpeed: 0.3
   moveDir: {x: 0, y: 0}
   Scale: 0.6
   attackRange_X: 1
-  attackRange_Y: 1
-  hp: 50
+  attackRange_Y: 6
+  hp: 100
   damage: 8
-  costValue: 200
+  costValue: 100
+  isDead: 0
   isContact: 0
   attackInterval: 1
-  isRangeAttackType: 1
+  isRangeAttackType: 0
   hpBar: {fileID: 4868692053434933307}
+  drawGizmos: 1
+  TargetLayer:
+    serializedVersion: 2
+    m_Bits: 128
   animalAnimation: {fileID: 849375835230977166}
+  deathParticlePrefab: {fileID: 0}
 --- !u!50 &3901102037832366900
 Rigidbody2D:
   serializedVersion: 4

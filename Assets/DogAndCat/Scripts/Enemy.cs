@@ -6,7 +6,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public float hp = 1000f;
-    private float maxHp;
+    public float maxHp;
 
     public float delayTimeForSpawnCat_1 = 7f;
     public float delayTimeForSpawnCat_2 = 10f;
