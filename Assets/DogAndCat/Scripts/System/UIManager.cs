@@ -194,11 +194,19 @@ public class UIManager : SingletonManager<UIManager>
     public void SetLevelValueText()
     {
         levelValueText.text = $"Lv : {playerLevel + 1}";
+        if (playerLevel == 6)
+        {
+            levelValueText.text = "Lv : Max";
+        }
     }
 
     public void SetLevelUpCostText()
     {
         levelUpCostText.text = $"{currentLevelUpCost} 원";
+        if (playerLevel == 6)
+        {
+            levelUpCostText.text = "최대레벨";
+        }
     }
 
     public void SetEnemyHpText()

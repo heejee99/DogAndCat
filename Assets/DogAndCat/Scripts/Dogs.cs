@@ -84,7 +84,7 @@ public class Dogs : MonoBehaviour
             moveDir = Vector2.left;
         }
         //만나면 벡터값 0
-        else
+        else if (isContact && CanAttack())
         {
             moveDir = Vector2.zero;
             
@@ -102,6 +102,29 @@ public class Dogs : MonoBehaviour
 
 
         hpBar.fillAmount = hpBarAmount;
+    }
+
+    private bool CanAttack()
+    {
+        bool canAttack = false;
+
+        foreach(Collider2D enemy in detectedEnemies)
+        {
+            Cats cat = enemy.GetComponent<Cats>();
+            if (cat != null && cat.isDead == false)
+            {
+                Debug.Log("공격 가능");
+                canAttack = true;
+                break;
+            }
+
+        }
+        if(canAttack == false)
+        {
+
+            Debug.Log("공격 불가능");
+        }
+        return canAttack;
     }
 
     public void CheckEnemy()
@@ -171,18 +194,18 @@ public class Dogs : MonoBehaviour
             {
                 if (detectedEnemy.TryGetComponent<Enemy>(out Enemy enemy))
                 {
-                    enemy.TakeDamage(damage);
                     if (!enemy.isDead)
                     {
+                        enemy.TakeDamage(damage);
                         aliveEnemies.Add(detectedEnemy); //살아있는 적만 추가
                     }
                 }
 
                 else if (detectedEnemy.TryGetComponent<Cats>(out Cats cat))
                 {
-                    cat.TakeDamage(damage);
                     if (!cat.isDead)
                     {
+                        cat.TakeDamage(damage);
                         aliveEnemies.Add(detectedEnemy);
                     }
 
@@ -220,18 +243,18 @@ public class Dogs : MonoBehaviour
         {
             if (closestEnemy.TryGetComponent<Enemy>(out Enemy enemy))
             {
-                enemy.TakeDamage(damage);
                 if (!enemy.isDead)
                 {
+                    enemy.TakeDamage(damage);
                     detectedEnemies = detectedEnemies.Where(e => e != closestEnemy).ToArray();
                 }
 
             }
             else if (closestEnemy.TryGetComponent<Cats>(out Cats cat))
             {
-                cat.TakeDamage(damage);
                 if (!cat.isDead)
                 {
+                    cat.TakeDamage(damage);
                     detectedEnemies = detectedEnemies.Where(e => e != closestEnemy).ToArray();
                 }
 

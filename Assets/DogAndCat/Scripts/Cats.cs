@@ -64,7 +64,7 @@ public class Cats : MonoBehaviour
             {
                 moveDir = Vector2.right;
             }
-            else
+            else if (isContact && CanAttack())
             {
                 moveDir = Vector2.zero;
                 animalAnimation.Jump();
@@ -86,7 +86,23 @@ public class Cats : MonoBehaviour
 
         hpBar.fillAmount = hpBarAmount;
     }
+    private bool CanAttack()
+    {
+        bool canAttack = false;
 
+        foreach (Collider2D enemy in detectedPlayers)
+        {
+            Dogs dog = enemy.GetComponent<Dogs>();
+            if (dog != null && dog.isDead == false)
+            {
+                canAttack = true;
+                break;
+            }
+
+        }
+
+        return canAttack;
+    }
     //적 감지
     public void CheckEnemy()
     {
@@ -152,18 +168,18 @@ public class Cats : MonoBehaviour
             {
                 if (detectedPlayer.TryGetComponent<Player>(out Player player))
                 {
-                    player.TakeDamage(damage);
                     if (!player.isDead)
                     {
+                        player.TakeDamage(damage);
                         aliveplayers.Add(detectedPlayer);
                     }
                 }
 
                 else if (detectedPlayer.TryGetComponent<Dogs>(out Dogs dog))
                 {
-                    dog.TakeDamage(damage);
                     if (!dog.isDead)
                     {
+                        dog.TakeDamage(damage);
                         aliveplayers.Add(detectedPlayer);
                     }
                 }
@@ -199,18 +215,18 @@ public class Cats : MonoBehaviour
         {
             if (closestPlayer.TryGetComponent<Player>(out Player player))
             {
-                player.TakeDamage(damage);
                 if (!player.isDead)
                 {
+                    player.TakeDamage(damage);
                     detectedPlayers = detectedPlayers.Where(e => e != closestPlayer).ToArray();
                 }
             }
             //단일 공격은 어짜피 한명만 공격하기 때문에 범위 공격과 다르게 else if를 씀
             else if (closestPlayer.TryGetComponent<Dogs>(out Dogs dog))
             {
-                dog.TakeDamage(damage);
                 if (!dog.isDead)
                 {
+                    dog.TakeDamage(damage);
                     detectedPlayers = detectedPlayers.Where(e => e != closestPlayer).ToArray();
                 }
             }
@@ -260,7 +276,7 @@ public class Cats : MonoBehaviour
         yield return new WaitForSeconds(2f);
         GameManager.Instance.cats.Remove(this);
         if (gameObject != null)
-        Destroy(gameObject);
+            Destroy(gameObject);
     }
 
     private void OnDrawGizmos()

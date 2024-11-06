@@ -6,9 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/DogAndCat/Scenes/GameScene.unity
-    guid: 9c52e9fa3cb2d6341af134f173308f05
-  - enabled: 1
     path: Assets/DogAndCat/Scenes/MainMenuScene.unity
     guid: 2e02c4641e58aa94e8730f2c0604875c
+  - enabled: 1
+    path: Assets/DogAndCat/Scenes/GameScene.unity
+    guid: 9c52e9fa3cb2d6341af134f173308f05
   m_configObjects: {}

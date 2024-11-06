@@ -44,6 +44,14 @@ public class Player : MonoBehaviour
         //{
         //    StartCoroutine(SpecialMoveAttack());
         //}
+        if (Input.GetKey(KeyCode.Q))
+        {
+            Time.timeScale = 10f;
+        }
+        else if (Input.GetKey(KeyCode.W))
+        {
+            Time.timeScale = 1f;
+        }
         isSpecialMoveCoolTime();
 
         if (isDead)

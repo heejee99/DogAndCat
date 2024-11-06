@@ -12,11 +12,11 @@ public abstract class SingletonManager<T> : MonoBehaviour where T : MonoBehaviou
         if (instance == null)
         {
             instance = this as T;
-            DontDestroyOnLoad(instance);
+            //DontDestroyOnLoad(instance);
         }
         else
         {
-            DestroyImmediate(instance);
+            //DestroyImmediate(instance);
         }
     }
 }
