@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, IHealth
 {
     public float hp = 1000f;
     public float maxHp;
@@ -11,6 +11,8 @@ public class Enemy : MonoBehaviour
     public float delayTimeForSpawnCat_1 = 7f;
     public float delayTimeForSpawnCat_2 = 10f;
     public float delayTimeForSpawnCat_3 = 30f;
+
+    public float hpBarAmount { get { return hp / maxHp; } }
 
     public bool isDead = false;
 
@@ -63,12 +65,12 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(float damage)
     {
         hp -= damage;
+        print("적 타워가 데미지를 입음");
         if (hp <= 0)
         {
             hp = 0;
             isDead = true;
         }
-        print("타워가 데미지를 입음");
     }
 
     public void OnDead()

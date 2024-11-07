@@ -122,6 +122,8 @@ public class UIManager : SingletonManager<UIManager>
 
         //지면 이미지 켜짐
         OnDefeatImage();
+        //이기면 이미지 켜짐
+        OnVictoryImage();
     }
 
     private void UpdateSpawnDelay()
@@ -277,4 +279,16 @@ public class UIManager : SingletonManager<UIManager>
     //    }
 
     //}
+    public GameObject victoryImage;
+    public void OnVictoryImage()
+    {
+        if (GameManager.Instance.enemy.isDead)
+        {
+            //다시 게임을 시작할때 참조가 안될 수 있다.
+            if (victoryImage != null)
+            {
+                victoryImage.SetActive(true);
+            }
+        }
+    }
 }

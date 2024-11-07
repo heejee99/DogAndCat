@@ -211,11 +211,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4717599310743505443}
+  - component: {fileID: 7602326402614008117}
   - component: {fileID: 2548094616136756052}
   - component: {fileID: 9121044210786060640}
   - component: {fileID: 2542056253061295786}
   m_Layer: 0
-  m_Name: Rottweiler
+  m_Name: Dog_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -237,6 +238,18 @@ Transform:
   - {fileID: 4717599311177040460}
   m_Father: {fileID: 4717599311788538368}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7602326402614008117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4717599310743505442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54052a67b152f9a4282e97ff7cf35c46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!95 &2548094616136756052
 Animator:
   serializedVersion: 5
@@ -1117,7 +1130,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4717599311788538368}
-  - component: {fileID: 1847583241678278965}
+  - component: {fileID: 4315623298709118186}
   - component: {fileID: 7961113682360020678}
   - component: {fileID: 6579293859363062221}
   m_Layer: 6
@@ -1144,7 +1157,7 @@ Transform:
   - {fileID: 1196531924524519276}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1847583241678278965
+--- !u!114 &4315623298709118186
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1153,28 +1166,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 4717599311788538371}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 937e4f28099db474daeef5cf863a2416, type: 3}
+  m_Script: {fileID: 11500000, guid: f21e252e8491976419ede0428e71ce19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 0.9
-  moveDir: {x: 0, y: 0}
-  Scale: 0.6
+  isMove: 1
+  goLeft: 1
+  scale: 0.6
   attackRange_X: 4
   attackRange_Y: 6
   hp: 200
   damage: 20
-  costValue: 400
   isDead: 0
-  isContact: 0
+  detectedEnemies: []
   attackInterval: 1
   isRangeAttackType: 1
   hpBar: {fileID: 6905571756427864395}
-  drawGizmos: 0
+  drawGizmo: 0
   TargetLayer:
     serializedVersion: 2
     m_Bits: 128
-  animalAnimation: {fileID: 2542056253061295786}
-  deathParticlePrefab: {fileID: 0}
+  animation: {fileID: 0}
 --- !u!61 &7961113682360020678
 BoxCollider2D:
   m_ObjectHideFlags: 0

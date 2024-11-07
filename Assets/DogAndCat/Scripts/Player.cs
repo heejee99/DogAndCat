@@ -7,13 +7,14 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IHealth
 {
     public float gold = 0f;
     public int level = 1;
     public int exp = 0;
     public float hp = 1000;
     public float maxHp;
+    public float hpBarAmount { get { return hp / maxHp;  } }
     public float specialMoveDamage = 100f;
 
     public int value = 6;
@@ -74,12 +75,12 @@ public class Player : MonoBehaviour
     public void TakeDamage(float damage)
     {
         hp -= damage;
+        print("타워가 데미지를 입음");
         if (hp <= 0)
         {
             hp = 0;
             isDead = true;
         }
-        print("타워가 데미지를 입음");
     }
 
     public void OnDead()
@@ -142,12 +143,11 @@ public class Player : MonoBehaviour
             , new Vector2(specialMoveAttackRange_X, specialMoveAttackRange_Y), 0);
         foreach (var enemyCollider in enemyColliders)
         {
-            if (enemyCollider.TryGetComponent<Cats>(out Cats cat))
+            if (enemyCollider.TryGetComponent<Cat>(out Cat cat))
             {
                 cat.TakeDamage(specialMoveDamage);
                 cat.transform.position -= Vector3.right * 2;
             }
-            
         }
 
         //끝나고나면 배열 지우기

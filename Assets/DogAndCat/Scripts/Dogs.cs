@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class Dogs : MonoBehaviour
 {
+    public float costValue = 200; //
+                                  //
     public float moveSpeed = 0.5f; //이동속도
     public Vector2 moveDir; //움직이는 방향
     public float Scale = 0.6f; //크기
@@ -17,7 +19,6 @@ public class Dogs : MonoBehaviour
     public float hp = 50; //체력
     private float maxHp; //최대 체력
     public float damage = 8; //공격력
-    public float costValue = 200; //생산비용
 
     public bool isDead = false; //죽었는가?
 

@@ -303,11 +303,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1924948138404641380, guid: 5527a0347e8a7444daf204af4566ef38, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2
+      value: 2.27
       objectReference: {fileID: 0}
     - target: {fileID: 1924948138404641380, guid: 5527a0347e8a7444daf204af4566ef38, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.17
+      value: -2.05
       objectReference: {fileID: 0}
     - target: {fileID: 1924948138404641380, guid: 5527a0347e8a7444daf204af4566ef38, type: 3}
       propertyPath: m_LocalPosition.z
@@ -431,7 +431,7 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: 0b25704c326d64d58bd7c9463d86eb8d, type: 3}
     - target: {fileID: 1924948140224244369, guid: 5527a0347e8a7444daf204af4566ef38, type: 3}
       propertyPath: m_Name
-      value: Poodle baby
+      value: Dog_1
       objectReference: {fileID: 0}
     - target: {fileID: 2172391306778027553, guid: 5527a0347e8a7444daf204af4566ef38, type: 3}
       propertyPath: m_labelHash
@@ -561,6 +561,22 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 623ced00d53c0455fa3a99e085d14386, type: 3}
+    - target: {fileID: 7820248972181347104, guid: 5527a0347e8a7444daf204af4566ef38, type: 3}
+      propertyPath: hp
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 7820248972181347104, guid: 5527a0347e8a7444daf204af4566ef38, type: 3}
+      propertyPath: hpBar
+      value: 
+      objectReference: {fileID: 8525652316205096792}
+    - target: {fileID: 7820248972181347104, guid: 5527a0347e8a7444daf204af4566ef38, type: 3}
+      propertyPath: moveSpeed
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7820248972181347104, guid: 5527a0347e8a7444daf204af4566ef38, type: 3}
+      propertyPath: attackRange_X
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 8667355127697798101, guid: 5527a0347e8a7444daf204af4566ef38, type: 3}
       propertyPath: m_labelHash
       value: 8.751192e-33
@@ -589,7 +605,8 @@ PrefabInstance:
       propertyPath: m_SpriteHash
       value: 993455863
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2497547882077171014, guid: 5527a0347e8a7444daf204af4566ef38, type: 3}
     m_RemovedGameObjects:
     - {fileID: 6320286867334590070, guid: 5527a0347e8a7444daf204af4566ef38, type: 3}
     - {fileID: 5024101763356989212, guid: 5527a0347e8a7444daf204af4566ef38, type: 3}
